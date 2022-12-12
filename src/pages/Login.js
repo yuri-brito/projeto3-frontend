@@ -1,8 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
-import { Card, FloatingLabel, Row } from "react-bootstrap";
-import { Col } from "react-bootstrap";
+import { Card, FloatingLabel } from "react-bootstrap";
 import { useState, useContext } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +23,7 @@ function Login(props) {
 
       setLoggedUser({ ...response.data });
       localStorage.setItem("loggedUser", JSON.stringify(response.data));
-      // if (response.data.user.role === "admin") {
-      //   navigate("/admin");
-      // }
-      navigate("/tarefas");
+      navigate("/profile");
     } catch (error) {
       toast.error(error.response.data.msg);
       return;
@@ -44,6 +40,7 @@ function Login(props) {
         marginBottom: 30,
         boxShadow:
           "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
+        animation: "fadein 1.5s",
       }}
     >
       <Card.Header>
@@ -53,11 +50,7 @@ function Login(props) {
         <Container className="d-flex flex-column align-items-center justify-content-center">
           <Form onSubmit={handleSubmit} className="w-100">
             <Form.Group className="mb-3">
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Endereço de email"
-                className="mb-3"
-              >
+              <FloatingLabel label="Endereço de email" className="mb-3">
                 <Form.Control
                   type="email"
                   name="email"
@@ -69,11 +62,7 @@ function Login(props) {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <FloatingLabel
-                controlId="floatingInput"
-                label="Senha"
-                className="mb-3"
-              >
+              <FloatingLabel label="Senha" className="mb-3">
                 <Form.Control
                   type="password"
                   name="password"

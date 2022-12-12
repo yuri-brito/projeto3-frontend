@@ -8,7 +8,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api.js";
 import toast from "react-hot-toast";
 import Select from "react-select";
@@ -107,6 +107,7 @@ const Registro = (props) => {
             marginBottom: 30,
             boxShadow:
               "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
+            animation: "fadein 1.5s",
           }}
         >
           <Card.Header>
@@ -180,10 +181,20 @@ const Registro = (props) => {
                     </Form.Group>
                   </Col>
                 </Row>
-
-                <Button variant="primary" type="submit">
-                  <i className="bi bi-person-plus"></i> Cadastrar
-                </Button>
+                <Row>
+                  <Col>
+                    <Button variant="primary" type="submit">
+                      <i className="bi bi-person-plus"></i> Cadastrar
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Link to="/">
+                      <Button variant="secondary">
+                        <i className="bi bi-arrow-return-left"></i> Voltar
+                      </Button>
+                    </Link>
+                  </Col>
+                </Row>
               </Form>
             </Container>
           </Card.Body>

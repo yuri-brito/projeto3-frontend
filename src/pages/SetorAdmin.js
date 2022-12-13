@@ -82,8 +82,9 @@ function SetorAdmin() {
                       key={index}
                     >
                       <Row>
-                        <Col>{obj.nome}</Col>
-                        <Col>{obj.sigla}</Col>
+                        <Col>
+                          {obj.sigla} - {obj.nome}
+                        </Col>
                         <Col>{obj.chefe}</Col>
                         <Col>{obj.substituto}</Col>
                         <Col>Usuários: {obj.usuarios.length}</Col>

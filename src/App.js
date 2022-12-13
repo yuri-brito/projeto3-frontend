@@ -29,7 +29,7 @@ function App() {
             element={<ProtectedRoute Component={SetorGestor} />}
           />
           <Route
-            path="/setor/:id"
+            path="/setor/:setorId"
             element={<ProtectedRoute Component={SetorGestor} />}
           />
           <Route

@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
 function NavBar() {
-  const { setLoggedUser } = useContext(AuthContext);
-  const userData = JSON.parse(window.localStorage.getItem("loggedUser"));
+  const { loggedUser, setLoggedUser } = useContext(AuthContext);
+  const userData = loggedUser;
 
   function logOut() {
     localStorage.removeItem("loggedUser");

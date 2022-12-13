@@ -18,15 +18,15 @@ function SetorGestor() {
   const [isLoading, setIsLoading] = useState(true);
   const [setorData, setSetorData] = useState({});
   const userData = JSON.parse(window.localStorage.getItem("loggedUser"));
+  console.log(setorData);
 
   //resolver essa captura - retornando undefined
   const { setorId } = useParams();
-  console.log(setorId);
 
   //api dos dados do setor
   async function fetchingDadosSetor() {
     try {
-      const response = await api.get(`/setor/${userData.user.setor._id}`);
+      const response = await api.get(`/setor/${setorId}`);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
@@ -97,7 +97,7 @@ function SetorGestor() {
                                 type="checkbox"
                                 name="userStatus"
                                 checked
-                                onClick={(e) =>
+                                onChange={(e) =>
                                   handleUserStatus(e.target.value, obj._id)
                                 }
                               />

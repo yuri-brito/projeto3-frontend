@@ -1,24 +1,15 @@
 import api from "../api/api.js";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
-import Select from "react-select";
-import {
-  Button,
-  Card,
-  Col,
-  Container,
-  ListGroup,
-  NavLink,
-  Row,
-} from "react-bootstrap";
+import { Button, Card, Col, Container, ListGroup, Row } from "react-bootstrap";
 import SpinnerImage from "../components/SpinnerImage.js";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import SetorEdit from "../components/SetorEdit.js";
+import SetorDelete from "../components/SetorDelete.js";
 
 function SetorAdmin() {
   const [isLoading, setIsLoading] = useState(true);
   const [setorData, setSetorData] = useState({});
-  const userData = JSON.parse(window.localStorage.getItem("loggedUser"));
-  console.log(setorData);
 
   //api dos dados do setor
   async function fetchingDadosSetor() {
@@ -63,16 +54,37 @@ function SetorAdmin() {
             marginRight: "auto",
             marginTop: 10,
             marginBottom: 30,
+            animation: "fadein 1.5s",
             boxShadow:
               "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
           }}
         >
           <Card.Header>
-            <h4>Gestão setores</h4>
+            <h4>Gestão Unidades</h4>
           </Card.Header>
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
+                <ListGroup.Item
+                  action
+                  variant="light"
+                  style={{ width: "92vw", marginBottom: "20px" }}
+                >
+                  <Row>
+                    <Col>Nome setor</Col>
+                    <Col>nome servidor</Col>
+
+                    <Col>Usuários: </Col>
+                    <Col> </Col>
+                    <Col>
+                      <Button className="my-0" variant="success" size="sm">
+                        Criar novo setor{" "}
+                        <i className="bi bi-plus-square-dotted"></i>
+                      </Button>
+                    </Col>
+                    <Col> </Col>
+                  </Row>
+                </ListGroup.Item>
                 {setorData.map((obj, index) => {
                   return (
                     <ListGroup.Item
@@ -83,27 +95,28 @@ function SetorAdmin() {
                     >
                       <Row>
                         <Col>
-                          {obj.sigla} - {obj.nome}
+                          {obj.sigla} – {obj.nome}
                         </Col>
-                        <Col>{obj.chefe}</Col>
-                        <Col>{obj.substituto}</Col>
+                        {obj.chefe.name && <Col>{obj.chefe.name}</Col>}
+                        {obj.substituto.name && (
+                          <Col>{obj.substituto.name}</Col>
+                        )}
                         <Col>Usuários: {obj.usuarios.length}</Col>
                         <Col>
                           <Button variant="primary">
-                            <NavLink href={`/setor/${obj._id}`}>
+                            <Link
+                              className="text-white text-decoration-none"
+                              to={`/setor/${obj._id}`}
+                            >
                               <i className="bi bi-ticket-detailed"></i> Detalhar
-                            </NavLink>
+                            </Link>
                           </Button>
                         </Col>
                         <Col>
-                          <Button variant="secondary">
-                            <i className="bi bi-pencil"></i> Editar
-                          </Button>
+                          <SetorEdit setorData={obj} />
                         </Col>
                         <Col>
-                          <Button variant="danger">
-                            <i className="bi bi-trash3"></i> Excluir
-                          </Button>
+                          <SetorDelete setorData={obj} />
                         </Col>
                       </Row>
                     </ListGroup.Item>

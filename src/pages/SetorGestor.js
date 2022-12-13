@@ -66,13 +66,14 @@ function SetorGestor() {
             marginRight: "auto",
             marginTop: 10,
             marginBottom: 30,
+            animation: "fadein 1.5s",
             boxShadow:
               "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
           }}
         >
           <Card.Header>
             <h4>
-              {setorData.nome} - {setorData.sigla}
+              {setorData.nome} – {setorData.sigla}
             </h4>
           </Card.Header>
           <Card.Body>

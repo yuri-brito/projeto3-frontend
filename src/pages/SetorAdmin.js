@@ -3,9 +3,10 @@ import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
 import { Button, Card, Col, Container, ListGroup, Row } from "react-bootstrap";
 import SpinnerImage from "../components/SpinnerImage.js";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SetorEdit from "../components/SetorEdit.js";
 import SetorDelete from "../components/SetorDelete.js";
+import SetorCreate from "../components/SetorCreate.js";
 
 function SetorAdmin() {
   const [isLoading, setIsLoading] = useState(true);
@@ -30,17 +31,6 @@ function SetorAdmin() {
     fetchingDadosSetor();
   }, []);
 
-  async function handleUserStatus(e, userId) {
-    const newStatus = e === "on" ? false : true;
-
-    try {
-      await api.put(`/user/edit/${userId}`, { active: newStatus });
-    } catch (error) {
-      console.log(error);
-      toast.error("Algo deu errado. Tente novamente!");
-    }
-  }
-
   return (
     <>
       {isLoading ? (
@@ -52,7 +42,7 @@ function SetorAdmin() {
             width: "95vw",
             marginLeft: "auto",
             marginRight: "auto",
-            marginTop: 10,
+            marginTop: 30,
             marginBottom: 30,
             animation: "fadein 1.5s",
             boxShadow:
@@ -66,7 +56,6 @@ function SetorAdmin() {
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
                 <ListGroup.Item
-                  action
                   variant="light"
                   style={{ width: "92vw", marginBottom: "20px" }}
                 >
@@ -77,10 +66,7 @@ function SetorAdmin() {
                     <Col>Usuários: </Col>
                     <Col> </Col>
                     <Col>
-                      <Button className="my-0" variant="success" size="sm">
-                        Criar novo setor{" "}
-                        <i className="bi bi-plus-square-dotted"></i>
-                      </Button>
+                      <SetorCreate />
                     </Col>
                     <Col> </Col>
                   </Row>
@@ -103,7 +89,7 @@ function SetorAdmin() {
                         )}
                         <Col>Usuários: {obj.usuarios.length}</Col>
                         <Col>
-                          <Button variant="primary">
+                          <Button variant="primary" size="sm" className="my-0">
                             <Link
                               className="text-white text-decoration-none"
                               to={`/setor/${obj._id}`}
@@ -127,7 +113,6 @@ function SetorAdmin() {
           </Card.Body>
         </Card>
       )}
-      ;
     </>
   );
 }

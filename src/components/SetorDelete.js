@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Button, Modal, Form, Row, Col, Container } from "react-bootstrap";
+import { useState } from "react";
+import { Button, Modal, Row, Col, Container } from "react-bootstrap";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
@@ -42,7 +42,7 @@ const SetorDelete = ({ setorData }) => {
 
   return (
     <div>
-      <Button variant="danger" onClick={handleShow}>
+      <Button size="sm" className="my-0" variant="danger" onClick={handleShow}>
         <i className="bi bi-trash3"></i> Excluir
       </Button>
 
@@ -71,7 +71,7 @@ const SetorDelete = ({ setorData }) => {
             <Row>
               <Col className="col-md-6 text-center">
                 <Button variant="danger" type="submit" onClick={deleteSetor}>
-                  <i className="bi bi-download"></i> CONFIRMAR
+                  <i className="bi bi-trash3"></i> CONFIRMAR
                 </Button>
               </Col>
               <Col className="col-md-6 text-center">

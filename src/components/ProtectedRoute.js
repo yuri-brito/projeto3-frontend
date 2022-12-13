@@ -7,7 +7,7 @@ function ProtectedRoute({ Component }) {
   if (loggedUser) {
     return <Component />;
   } else {
-    return <Navigate to={"/login"} />;
+    return <Navigate to={"/"} />;
   }
 }
 export default ProtectedRoute;

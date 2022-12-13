@@ -11,6 +11,7 @@ import NavBar from "./components/NavBar";
 import SetorGestor from "./pages/SetorGestor";
 import SetorAdmin from "./pages/SetorAdmin";
 import Footer from "./components/Footer";
+import Profile from "./pages/Profile";
 function App() {
   return (
     <div className="App">
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+          <Route path="/profile" element={<Profile />} />
           <Route
             path="/tarefas"
             element={<ProtectedRoute Component={Tarefas} />}

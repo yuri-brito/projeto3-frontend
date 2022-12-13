@@ -16,7 +16,8 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  height: 200px;
+  height: 40px;
+  margin-top: 10px;
 }
 @keyframes fadeinout {
   0% {

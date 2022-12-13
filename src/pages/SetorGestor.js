@@ -64,7 +64,7 @@ function SetorGestor() {
             width: "95vw",
             marginLeft: "auto",
             marginRight: "auto",
-            marginTop: 10,
+            marginTop: 30,
             marginBottom: 30,
             animation: "fadein 1.5s",
             boxShadow:
@@ -79,6 +79,32 @@ function SetorGestor() {
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
+                <ListGroup.Item
+                  variant="light"
+                  style={{
+                    width: "92vw",
+                    height: "20vh",
+                    marginBottom: "20px",
+                  }}
+                >
+                  dashboard do Gestor
+                </ListGroup.Item>
+
+                <ListGroup.Item
+                  variant="light"
+                  style={{ width: "92vw", marginBottom: "20px" }}
+                >
+                  <Row>
+                    <Col>Nome setor</Col>
+                    <Col>nome servidor</Col>
+
+                    <Col>Usuários: </Col>
+                    <Col> </Col>
+                    <Col> </Col>
+                    <Col> </Col>
+                  </Row>
+                </ListGroup.Item>
+
                 {setorData.usuarios.map((obj, index) => {
                   return (
                     <ListGroup.Item
@@ -91,26 +117,10 @@ function SetorGestor() {
                         <Col>{obj.name}</Col>
                         <Col>{obj.email}</Col>
                         <Col>{obj.role}</Col>
-                        {userData.user.role === "admin" && (
-                          <Col>
-                            {obj.active === true ? (
-                              <input
-                                type="checkbox"
-                                name="userStatus"
-                                checked
-                                onChange={(e) =>
-                                  handleUserStatus(e.target.value, obj._id)
-                                }
-                              />
-                            ) : (
-                              <input type="checkbox" name="userStatus" />
-                            )}
-                          </Col>
-                        )}
                         <Col>ProgressBar1</Col>
                         <Col>ProgressBar2</Col>
                         <Col>
-                          <Button variant="primary">
+                          <Button variant="primary" size="sm">
                             <i className="bi bi-ticket-detailed"></i> Detalhar
                           </Button>
                         </Col>

@@ -12,8 +12,6 @@ import Select from "react-select";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/authContext.js";
 import SpinnerImage from "./SpinnerImage";
 
 const SetorEdit = ({ setorData }) => {
@@ -31,7 +29,6 @@ const SetorEdit = ({ setorData }) => {
       setUsuarios(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
       toast.error("Algo deu errado. Tente novamente!");
     }
   }
@@ -65,8 +62,6 @@ const SetorEdit = ({ setorData }) => {
   };
 
   const handleChange = (e, selector) => {
-    console.log(e);
-    console.log(selector);
     if (selector) {
       if (selector.name === "chefe") {
         setForm({ ...form, chefe: e._id });
@@ -105,7 +100,6 @@ const SetorEdit = ({ setorData }) => {
     } catch (error) {
       toast.error(error.response.data.msg);
       setIsLoading(false);
-      console.log(error);
     }
   }
 
@@ -129,7 +123,12 @@ const SetorEdit = ({ setorData }) => {
 
   return (
     <div>
-      <Button variant="secondary" onClick={handleShow}>
+      <Button
+        size="sm"
+        className="my-0"
+        variant="secondary"
+        onClick={handleShow}
+      >
         <i className="bi bi-pencil"></i> Editar
       </Button>
 
@@ -176,6 +175,7 @@ const SetorEdit = ({ setorData }) => {
                           name="chefe"
                           className="mb-3"
                           options={usuarios}
+                          selectedoption
                           getOptionLabel={(option) => `${option.name}`}
                           styles={colourStyles}
                           isSearchable={true}
@@ -186,7 +186,7 @@ const SetorEdit = ({ setorData }) => {
                           name="chefe"
                           className="mb-3"
                           options={usuarios}
-                          value={form.chefe}
+                          defaultValue={form.chefe}
                           getOptionLabel={(option) => `${option.name}`}
                           styles={colourStyles}
                           isSearchable={true}
@@ -194,19 +194,29 @@ const SetorEdit = ({ setorData }) => {
                         />
                       )}
 
-                      {form.substituto === "" ? <></> : <></>}
-
-                      <Select
-                        placeholder="Selecione um(a) substituto(a)"
-                        name="substituto"
-                        className="mb-3"
-                        options={usuarios}
-                        value={form.substituto}
-                        getOptionLabel={(option) => `${option.name}`}
-                        styles={colourStyles}
-                        isSearchable={true}
-                        onChange={(e, selector) => handleChange(e, selector)}
-                      />
+                      {setorData.substituto === null ? (
+                        <Select
+                          placeholder="Selecione um(a) substituto(a)"
+                          name="substituto"
+                          className="mb-3"
+                          options={usuarios}
+                          getOptionLabel={(option) => `${option.name}`}
+                          styles={colourStyles}
+                          isSearchable={true}
+                          onChange={(e, selector) => handleChange(e, selector)}
+                        />
+                      ) : (
+                        <Select
+                          name="substituto"
+                          className="mb-3"
+                          options={usuarios}
+                          defaultValue={form.substituto}
+                          getOptionLabel={(option) => `${option.name}`}
+                          styles={colourStyles}
+                          isSearchable={true}
+                          onChange={(e, selector) => handleChange(e, selector)}
+                        />
+                      )}
                     </Form.Group>
                   </Col>
                 </Row>

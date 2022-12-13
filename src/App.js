@@ -12,6 +12,7 @@ import SetorGestor from "./pages/SetorGestor";
 import SetorAdmin from "./pages/SetorAdmin";
 import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
+import Atividades from "./pages/Atividades";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,6 +24,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+          <Route
+            path="/atividades"
+            element={<ProtectedRoute Component={Atividades} />}
+          />
           <Route
             path="/profile"
             element={<ProtectedRoute Component={Profile} />}
@@ -44,6 +49,7 @@ function App() {
             element={<ProtectedRoute Component={SetorAdmin} />}
           />
         </Routes>
+        <Footer />
       </AuthContextComponent>
     </div>
   );

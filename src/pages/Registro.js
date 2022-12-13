@@ -98,111 +98,108 @@ const Registro = (props) => {
       {isLoading ? (
         <SpinnerImage />
       ) : (
-        <div>
-          <Card
-            bg="light"
-            style={{
-              width: "50rem",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: 30,
-              marginBottom: 30,
-              boxShadow:
-                "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
-              animation: "fadein 1.5s",
-            }}
-          >
-            <Card.Header>
-              <h2>Formulário de Cadastro</h2>
-            </Card.Header>
-            <Card.Body>
-              <Container>
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3">
-                    <FloatingLabel label="Nome completo" className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Insira um nome"
-                        name="name"
-                        value={form.name}
-                        onChange={handleChange}
-                      />
-                    </FloatingLabel>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Select
-                      placeholder="Selecione um setor..."
-                      options={setores}
-                      getOptionLabel={(option) =>
-                        `${option.sigla} - ${option.nome}`
-                      }
-                      styles={colourStyles}
-                      isSearchable={true}
-                      onChange={(e) => handleChange(e)}
+        <Card
+          bg="light"
+          style={{
+            width: "50rem",
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginTop: 30,
+            marginBottom: 30,
+            boxShadow:
+              "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
+            animation: "fadein 1.5s",
+          }}
+        >
+          <Card.Header>
+            <h2>Formulário de Cadastro</h2>
+          </Card.Header>
+          <Card.Body>
+            <Container>
+              <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                  <FloatingLabel label="Nome completo" className="mb-3">
+                    <Form.Control
+                      type="text"
+                      placeholder="Insira um nome"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
                     />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <FloatingLabel label="Endereço de email" className="mb-3">
-                      <Form.Control
-                        type="email"
-                        placeholder="Insira um e-mail"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                      />
-                    </FloatingLabel>
-                  </Form.Group>
-                  <Row>
-                    <Col>
-                      <Form.Group className="mb-3">
-                        <FloatingLabel label="Senha" className="mb-3">
-                          <Form.Control
-                            type="password"
-                            placeholder="Insira uma senha"
-                            name="password"
-                            value={form.password}
-                            onChange={handleChange}
-                          />
-                        </FloatingLabel>
-                      </Form.Group>
-                    </Col>
-                    <Col>
-                      <Form.Group className="mb-3">
-                        <FloatingLabel
-                          label="Confirme a sua senha"
-                          className="mb-3"
-                        >
-                          <Form.Control
-                            type="password"
-                            placeholder="Confirme sua senha criada"
-                            name="confirmPassword"
-                            value={form.confirmPassword}
-                            onChange={handleChange}
-                          />
-                        </FloatingLabel>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Row>
-                    <Col>
-                      <Button variant="primary" type="submit">
-                        <i className="bi bi-person-plus"></i> Cadastrar
+                  </FloatingLabel>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Select
+                    placeholder="Selecione um setor..."
+                    options={setores}
+                    getOptionLabel={(option) =>
+                      `${option.sigla} - ${option.nome}`
+                    }
+                    styles={colourStyles}
+                    isSearchable={true}
+                    onChange={(e) => handleChange(e)}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <FloatingLabel label="Endereço de email" className="mb-3">
+                    <Form.Control
+                      type="email"
+                      placeholder="Insira um e-mail"
+                      name="email"
+                      value={form.email}
+                      onChange={handleChange}
+                    />
+                  </FloatingLabel>
+                </Form.Group>
+                <Row>
+                  <Col>
+                    <Form.Group className="mb-3">
+                      <FloatingLabel label="Senha" className="mb-3">
+                        <Form.Control
+                          type="password"
+                          placeholder="Insira uma senha"
+                          name="password"
+                          value={form.password}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3">
+                      <FloatingLabel
+                        label="Confirme a sua senha"
+                        className="mb-3"
+                      >
+                        <Form.Control
+                          type="password"
+                          placeholder="Confirme sua senha criada"
+                          name="confirmPassword"
+                          value={form.confirmPassword}
+                          onChange={handleChange}
+                        />
+                      </FloatingLabel>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Button variant="primary" type="submit">
+                      <i className="bi bi-person-plus"></i> Cadastrar
+                    </Button>
+                  </Col>
+                  <Col>
+                    <Link to="/">
+                      <Button variant="secondary">
+                        <i className="bi bi-arrow-return-left"></i> Voltar
                       </Button>
-                    </Col>
-                    <Col>
-                      <Link to="/">
-                        <Button variant="secondary">
-                          <i className="bi bi-arrow-return-left"></i> Voltar
-                        </Button>
-                      </Link>
-                    </Col>
-                  </Row>
-                </Form>
-              </Container>
-            </Card.Body>
-          </Card>
-          <Footer />
-        </div>
+                    </Link>
+                  </Col>
+                </Row>
+              </Form>
+            </Container>
+          </Card.Body>
+        </Card>
       )}
     </>
   );

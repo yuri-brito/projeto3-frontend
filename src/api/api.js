@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const apiURL = {
-  development: "http://localhost:8080",
+  //development: "http://localhost:8080",
+  development: "https://misty-tam-bear.cyclic.app",
   production: "https://misty-tam-bear.cyclic.app",
 };
 

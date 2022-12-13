@@ -5,6 +5,7 @@ import { AuthContextComponent } from "./contexts/authContext";
 import Login from "./pages/Login";
 import Tarefas from "./pages/Tarefas";
 import Registro from "./pages/Registro";
+import Profile from "./pages/Profile";
 function App() {
   return (
     <div className="App">
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/tarefas" element={<Tarefas />} />
         </Routes>
       </AuthContextComponent>

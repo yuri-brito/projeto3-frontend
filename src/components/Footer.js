@@ -4,6 +4,7 @@ import logoFooter from "../assets/patria_amada.png";
 function Footer() {
   return (
     <div
+      className="footer"
       style={{
         width: "100%",
         backgroundColor: "linen",

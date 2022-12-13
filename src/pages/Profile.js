@@ -14,90 +14,98 @@ function Profile() {
     setLoggedUser(null);
     navigate("/");
   }
+  console.log(loggedUser);
   return (
-    <div>
-      <Container className="mt-5" style={{ animation: "fadein 1.5s" }}>
-        <Row>
-          <Col className="d-flex flex-column align-items-end justify-content-center">
-            <img
-              src={profilePlaceholder}
-              alt="imagem de perfil"
-              width={200}
-              style={{ borderRadius: 12 }}
-            />
-          </Col>
-          <Col className="d-flex flex-column align-items-start justify-content-center">
-            <h1>{loggedUser.user.name}</h1>
-            <h6 className="fw-bold text-muted">
-              Cadastrado no SisPro desde -
-              {format(parseISO(loggedUser.user.createdAt), "dd/MM/yyyy")}
-            </h6>
-          </Col>
-        </Row>
-        <Card className="mt-5">
-          <Card.Header>
-            <h5 className="fw-bold m-0 py-1">Dados Cadastrais</h5>
-          </Card.Header>
-          <Card.Body>
-            <Row>
-              <Col>
-                <Card.Title>Nome Completo</Card.Title>
-                <Card.Text>{loggedUser.user.name}</Card.Text>
-              </Col>
-              <Col>
-                <Card.Title>Status</Card.Title>
-                <Card.Text>
-                  {loggedUser.user.active
-                    ? "Servidor Ativo"
-                    : "Servidor Inativo"}
-                </Card.Text>
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col>
-                <Card.Title>Endereço de e-mail</Card.Title>
-                <Card.Text>{loggedUser.user.email}</Card.Text>
-              </Col>
-              <Col>
-                <Card.Title>Perfil</Card.Title>
-                {loggedUser.user.role === "admin" && (
-                  <Card.Text>Administrador</Card.Text>
-                )}
-                {loggedUser.user.role === "gestor" && (
-                  <Card.Text>Gestor</Card.Text>
-                )}
-                {loggedUser.user.role === "usuario" && (
-                  <Card.Text>Usuário</Card.Text>
-                )}
-              </Col>
-            </Row>
-            <Row className="mt-3">
-              <Col>
-                <Card.Title>Setor</Card.Title>
-                <Card.Text>
-                  {loggedUser.user.setor.sigla} - {loggedUser.user.setor.nome}
-                </Card.Text>
-              </Col>
-              <Col>
-                <Card.Title>Tarefas cadastradas</Card.Title>
-                <Card.Text>{loggedUser.user.tarefas.length}</Card.Text>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-        <Row className="my-4">
-          <Col>
-            <TrocaEmail />
-          </Col>
-          <Col>
-            <Button variant="dark" onClick={signOut}>
-              Logout <i className="bi bi-box-arrow-right"></i>
-            </Button>
-          </Col>
-        </Row>
-      </Container>
-      <Footer />
-    </div>
+    <Container className="mt-5" style={{ animation: "fadein 1.5s" }}>
+      <Row>
+        <Col className="d-flex flex-column align-items-end justify-content-center">
+          <img
+            src={profilePlaceholder}
+            alt="imagem de perfil"
+            width={200}
+            style={{
+              borderRadius: 12,
+              boxShadow:
+                "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
+            }}
+          />
+        </Col>
+        <Col className="d-flex flex-column align-items-start justify-content-center">
+          <h1>{loggedUser.user.name}</h1>
+          <h6 className="fw-bold text-muted">
+            Cadastrado no SisPro desde -
+            {format(parseISO(loggedUser.user.createdAt), "dd/MM/yyyy")}
+          </h6>
+        </Col>
+      </Row>
+      <Card
+        className="mt-5"
+        style={{
+          boxShadow:
+            "0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19)",
+        }}
+      >
+        <Card.Header>
+          <h5 className="fw-bold m-0 py-1">Dados Cadastrais</h5>
+        </Card.Header>
+        <Card.Body>
+          <Row>
+            <Col>
+              <Card.Title>Nome Completo</Card.Title>
+              <Card.Text>{loggedUser.user.name}</Card.Text>
+            </Col>
+            <Col>
+              <Card.Title>Status</Card.Title>
+              <Card.Text>
+                {loggedUser.user.active ? "Servidor Ativo" : "Servidor Inativo"}
+              </Card.Text>
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col>
+              <Card.Title>Endereço de e-mail</Card.Title>
+              <Card.Text>{loggedUser.user.email}</Card.Text>
+            </Col>
+            <Col>
+              <Card.Title>Perfil</Card.Title>
+              {loggedUser.user.role === "admin" && (
+                <Card.Text>Administrador</Card.Text>
+              )}
+              {loggedUser.user.role === "gestor" && (
+                <Card.Text>Gestor</Card.Text>
+              )}
+              {loggedUser.user.role === "usuario" && (
+                <Card.Text>Usuário</Card.Text>
+              )}
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            <Col>
+              <Card.Title>Setor</Card.Title>
+              <Card.Text>
+                {!loggedUser.user.setor
+                  ? "Usuário sem setor"
+                  : `${loggedUser.user.setor.sigla} - ${loggedUser.user.setor.nome}`}
+              </Card.Text>
+            </Col>
+            <Col>
+              <Card.Title>Tarefas cadastradas</Card.Title>
+              <Card.Text>{loggedUser.user.tarefas.length}</Card.Text>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+      <Row className="my-4">
+        <Col>
+          <TrocaEmail />
+        </Col>
+        <Col>
+          <Button variant="dark" onClick={signOut}>
+            Logout <i className="bi bi-box-arrow-right"></i>
+          </Button>
+        </Col>
+      </Row>
+    </Container>
   );
 }
 

@@ -5,6 +5,7 @@ import { AuthContext } from "../contexts/authContext";
 import { parseISO, format } from "date-fns";
 import profilePlaceholder from "../assets/profilePlaceholder.png";
 import TrocaEmail from "../components/TrocaEmail";
+import Footer from "../components/Footer";
 function Profile() {
   const { loggedUser, setLoggedUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ function Profile() {
               style={{ borderRadius: 12 }}
             />
           </Col>
-          <Col className="d-flex flex-column align-items-center justify-content-center">
+          <Col className="d-flex flex-column align-items-start justify-content-center">
             <h1>{loggedUser.user.name}</h1>
             <h6 className="fw-bold text-muted">
               Cadastrado no SisPro desde -
@@ -95,6 +96,7 @@ function Profile() {
           </Col>
         </Row>
       </Container>
+      <Footer />
     </div>
   );
 }

@@ -13,6 +13,8 @@ import SetorAdmin from "./pages/SetorAdmin";
 import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <div className="App">
       <Toaster />
@@ -21,7 +23,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route
+            path="/profile"
+            element={<ProtectedRoute Component={Profile} />}
+          />
           <Route
             path="/tarefas"
             element={<ProtectedRoute Component={Tarefas} />}
@@ -39,7 +44,6 @@ function App() {
             element={<ProtectedRoute Component={SetorAdmin} />}
           />
         </Routes>
-        <Footer />
       </AuthContextComponent>
     </div>
   );

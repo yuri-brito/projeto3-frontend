@@ -9,7 +9,9 @@ import {
   FloatingLabel,
   Form,
   ListGroup,
+  OverlayTrigger,
   Row,
+  Tooltip,
 } from "react-bootstrap";
 import SpinnerImage from "../components/SpinnerImage.js";
 import { Link } from "react-router-dom";
@@ -21,6 +23,7 @@ function SetorAdmin() {
   const [isLoading, setIsLoading] = useState(true);
   const [setorData, setSetorData] = useState({});
   const [search, setSearch] = useState("");
+  const [reload, setReload] = useState(true);
 
   //api dos dados do setor
   async function fetchingDadosSetor() {
@@ -38,12 +41,12 @@ function SetorAdmin() {
   }
   useEffect(() => {
     fetchingDadosSetor();
-  }, []);
+  }, [reload]);
 
   function handleSearch(e) {
     setSearch(e.target.value);
   }
-
+  console.log(setorData);
   return (
     <>
       {isLoading ? (
@@ -63,7 +66,7 @@ function SetorAdmin() {
           }}
         >
           <Card.Header>
-            <h4>Gestão Unidades</h4>
+            <h4>Gestão de Setores</h4>
           </Card.Header>
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
@@ -74,9 +77,9 @@ function SetorAdmin() {
                   style={{ width: "92vw", marginBottom: "20px" }}
                 >
                   <Row>
-                    <Col>
+                    <Col className="col-6">
                       <FloatingLabel
-                        label="Filtrar por NOME ou SIGLA do setor"
+                        label="Filtrar por Nome, Chefe e Substituto do setor..."
                         className="ms-3"
                       >
                         <Form.Control
@@ -87,9 +90,8 @@ function SetorAdmin() {
                         />
                       </FloatingLabel>
                     </Col>
-                    <Col> </Col>
-                    <Col>
-                      <SetorCreate />
+                    <Col className="col-6">
+                      <SetorCreate reload={reload} setReload={setReload} />
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -102,13 +104,14 @@ function SetorAdmin() {
                         .toLowerCase()
                         .includes(search.toLowerCase()) ||
                       setor.chefe.name
-                        .toString()
+                        .toLowerCase()
                         .includes(search.toLowerCase()) ||
                       setor.substituto.name
-                        .toString()
+                        .toLowerCase()
                         .includes(search.toLowerCase())
                     );
                   })
+                  .reverse()
                   .map((obj, index) => {
                     return (
                       <ListGroup.Item
@@ -119,7 +122,7 @@ function SetorAdmin() {
                         key={index}
                       >
                         <Row>
-                          <Col className="ms-3">
+                          <Col className="col-2 ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -129,39 +132,36 @@ function SetorAdmin() {
                             >
                               Sigla e Nome
                             </Row>
-                            <Row>
-                              {obj.sigla} – {obj.nome}
-                            </Row>
+                            {`${obj.sigla} – ${obj.nome}`.length < 15 ? (
+                              <Row style={{ textAlign: "left" }}>
+                                {`${obj.sigla} – ${obj.nome}`}
+                              </Row>
+                            ) : (
+                              <Row style={{ textAlign: "left" }}>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      {`${obj.sigla} – ${obj.nome}`}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Card.Text
+                                    style={{
+                                      margin: 0,
+                                      padding: 0,
+                                      textAlign: "left",
+                                    }}
+                                  >
+                                    {`${obj.sigla} – ${obj.nome}`.slice(0, 15)}
+                                    ...
+                                  </Card.Text>
+                                </OverlayTrigger>
+                              </Row>
+                            )}
                           </Col>
-                          {obj.chefe.name && (
-                            <Col className="ms-3">
-                              <Row
-                                style={{
-                                  fontSize: 11,
-                                  fontStyle: "italic",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                Chefe
-                              </Row>
-                              <Row>{obj.chefe.name}</Row>
-                            </Col>
-                          )}
-                          {obj.substituto.name && (
-                            <Col className="ms-3">
-                              <Row
-                                style={{
-                                  fontSize: 11,
-                                  fontStyle: "italic",
-                                  fontWeight: "bold",
-                                }}
-                              >
-                                Substituto(a)
-                              </Row>
-                              <Row>{obj.substituto.name}</Row>
-                            </Col>
-                          )}
-                          <Col className="ms-3">
+
+                          <Col className="col-2">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -169,11 +169,95 @@ function SetorAdmin() {
                                 fontWeight: "bold",
                               }}
                             >
-                              Quantidade
+                              Chefe
                             </Row>
-                            <Row>Usuários: {obj.usuarios.length}</Row>
+                            {obj.chefe.name && (
+                              <div>
+                                {obj.chefe.name.length < 15 ? (
+                                  <Row style={{ textAlign: "left" }}>
+                                    {obj.chefe.name}
+                                  </Row>
+                                ) : (
+                                  <Row style={{ textAlign: "left" }}>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                          {obj.chefe.name}
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <Card.Text
+                                        style={{
+                                          margin: 0,
+                                          padding: 0,
+                                          textAlign: "left",
+                                        }}
+                                      >
+                                        {obj.chefe.name.slice(0, 15)}...
+                                      </Card.Text>
+                                    </OverlayTrigger>
+                                  </Row>
+                                )}
+                              </div>
+                            )}
                           </Col>
-                          <Col xs={1}>
+
+                          <Col className="col-2">
+                            <Row
+                              style={{
+                                fontSize: 11,
+                                fontStyle: "italic",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Substituto(a)
+                            </Row>
+                            {obj.substituto.name && (
+                              <div>
+                                {obj.substituto.name.length < 15 ? (
+                                  <Row style={{ textAlign: "left" }}>
+                                    {obj.substituto.name}
+                                  </Row>
+                                ) : (
+                                  <Row style={{ textAlign: "left" }}>
+                                    <OverlayTrigger
+                                      placement="top"
+                                      overlay={
+                                        <Tooltip id={`tooltip-top`}>
+                                          {obj.substituto.name}
+                                        </Tooltip>
+                                      }
+                                    >
+                                      <Card.Text
+                                        style={{
+                                          margin: 0,
+                                          padding: 0,
+                                          textAlign: "left",
+                                        }}
+                                      >
+                                        {obj.substituto.name.slice(0, 15)}...
+                                      </Card.Text>
+                                    </OverlayTrigger>
+                                  </Row>
+                                )}
+                              </div>
+                            )}
+                          </Col>
+
+                          <Col className="col-1">
+                            <Row
+                              style={{
+                                fontSize: 11,
+                                fontStyle: "italic",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Usuários
+                            </Row>
+                            <Row>{obj.usuarios.length}</Row>
+                          </Col>
+                          <Col className="p-0 d-flex justify-content-center align-items-end">
                             <Button
                               variant="primary"
                               size="sm"
@@ -188,11 +272,19 @@ function SetorAdmin() {
                               </Link>
                             </Button>
                           </Col>
-                          <Col xs={1}>
-                            <SetorEdit setorData={obj} />
+                          <Col className="p-0 d-flex justify-content-center align-items-end">
+                            <SetorEdit
+                              setorData={obj}
+                              reload={reload}
+                              setReload={setReload}
+                            />
                           </Col>
-                          <Col xs={1}>
-                            <SetorDelete setorData={obj} />
+                          <Col className="p-0 d-flex justify-content-center align-items-end">
+                            <SetorDelete
+                              setorData={obj}
+                              reload={reload}
+                              setReload={setReload}
+                            />
                           </Col>
                         </Row>
                       </ListGroup.Item>

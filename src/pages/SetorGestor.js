@@ -11,10 +11,12 @@ import {
   ListGroup,
   NavLink,
   Row,
+  OverlayTrigger,
+  Tooltip,
 } from "react-bootstrap";
 import { AuthContext } from "../contexts/authContext";
 import SpinnerImage from "../components/SpinnerImage.js";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function SetorGestor() {
   const [isLoading, setIsLoading] = useState(true);
@@ -75,23 +77,25 @@ function SetorGestor() {
         >
           <Card.Header>
             <h4>
-              {setorData.nome} – {setorData.sigla}
+              {setorData.sigla} - {setorData.nome}
             </h4>
           </Card.Header>
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
-                <ListGroup.Item
-                  as={"div"}
-                  variant="light"
-                  style={{
-                    width: "92vw",
-                    height: "20vh",
-                    marginBottom: "20px",
-                  }}
-                >
-                  dashboard do Gestor
-                </ListGroup.Item>
+                {loggedUser.user.role === "gestor" && (
+                  <ListGroup.Item
+                    as={"div"}
+                    variant="light"
+                    style={{
+                      width: "92vw",
+                      height: "20vh",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    dashboard do Gestor
+                  </ListGroup.Item>
+                )}
 
                 <ListGroup.Item
                   as={"div"}
@@ -99,7 +103,7 @@ function SetorGestor() {
                   style={{ width: "92vw", marginBottom: "20px" }}
                 >
                   <Row className="justify-content-md-center">
-                    <Col xs={6}>
+                    <Col>
                       <FloatingLabel
                         label="Filtrar por Nome, E-mail ou Perfil do usuário"
                         className="ms-3"
@@ -124,6 +128,15 @@ function SetorGestor() {
                     );
                   })
                   .map((obj, index) => {
+                    if (obj.role === "usuario") {
+                      obj.role = "Usuário";
+                    }
+                    if (obj.role === "gestor") {
+                      obj.role = "Gestor";
+                    }
+                    if (obj.role === "admin") {
+                      obj.role = "Admin";
+                    }
                     return (
                       <ListGroup.Item
                         as={"div"}
@@ -133,7 +146,7 @@ function SetorGestor() {
                         key={index}
                       >
                         <Row>
-                          <Col className="ms-3">
+                          <Col className="col-2 ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -143,7 +156,32 @@ function SetorGestor() {
                             >
                               Nome
                             </Row>
-                            <Row>{obj.name}</Row>
+                            {obj.name.length < 15 ? (
+                              <Row style={{ textAlign: "left" }}>
+                                {obj.name}
+                              </Row>
+                            ) : (
+                              <Row style={{ textAlign: "left" }}>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      {obj.name}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Card.Text
+                                    style={{
+                                      margin: 0,
+                                      padding: 0,
+                                      textAlign: "left",
+                                    }}
+                                  >
+                                    {obj.name.slice(0, 15)}...
+                                  </Card.Text>
+                                </OverlayTrigger>
+                              </Row>
+                            )}
                           </Col>
                           <Col className="ms-3">
                             <Row
@@ -155,9 +193,34 @@ function SetorGestor() {
                             >
                               e-mail
                             </Row>
-                            <Row>{obj.email}</Row>
+                            {obj.email.length < 15 ? (
+                              <Row style={{ textAlign: "left" }}>
+                                {obj.email}
+                              </Row>
+                            ) : (
+                              <Row style={{ textAlign: "left" }}>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      {obj.email}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Card.Text
+                                    style={{
+                                      margin: 0,
+                                      padding: 0,
+                                      textAlign: "left",
+                                    }}
+                                  >
+                                    {obj.email.slice(0, 15)}...
+                                  </Card.Text>
+                                </OverlayTrigger>
+                              </Row>
+                            )}
                           </Col>
-                          <Col className="ms-3">
+                          <Col className="col-1 ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -169,35 +232,59 @@ function SetorGestor() {
                             </Row>
                             <Row>{obj.role}</Row>
                           </Col>
-                          <Col className="ms-3">
-                            <Row
-                              style={{
-                                fontSize: 11,
-                                fontStyle: "italic",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              Atividades concluidas
-                            </Row>
-                            <Row>ProgressBar1</Row>
-                          </Col>
-                          <Col className="ms-3">
-                            <Row
-                              style={{
-                                fontSize: 11,
-                                fontStyle: "italic",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              Atividades validadas
-                            </Row>
-                            <Row>ProgressBar2</Row>
-                          </Col>
-                          <Col>
-                            <Button variant="primary" size="sm">
-                              <i className="bi bi-ticket-detailed"></i> Detalhar
-                            </Button>
-                          </Col>
+                          {loggedUser.user.role === "gestor" && (
+                            <Col className="ms-3">
+                              <Row
+                                style={{
+                                  fontSize: 11,
+                                  fontStyle: "italic",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Tarefas concluídas
+                              </Row>
+                              <Row>ProgressBar1</Row>
+                            </Col>
+                          )}
+                          {loggedUser.user.role === "gestor" && (
+                            <Col className="ms-3">
+                              <Row
+                                style={{
+                                  fontSize: 11,
+                                  fontStyle: "italic",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Tarefas validadas
+                              </Row>
+                              <Row>ProgressBar2</Row>
+                            </Col>
+                          )}
+                          {loggedUser.user.role === "gestor" ? (
+                            <Col className="d-flex justify-content-center align-items-end">
+                              <Link
+                                to="/tarefa/detail"
+                                style={{ textDecoration: "none" }}
+                              >
+                                <Button variant="primary" size="sm">
+                                  <i className="bi bi-ticket-detailed"></i>{" "}
+                                  Detalhar
+                                </Button>
+                              </Link>
+                            </Col>
+                          ) : (
+                            <Col className="d-flex justify-content-center align-items-end">
+                              <Link
+                                to="/user/detail"
+                                style={{ textDecoration: "none" }}
+                              >
+                                <Button variant="primary" size="sm">
+                                  <i className="bi bi-ticket-detailed"></i>{" "}
+                                  Detalhar
+                                </Button>
+                              </Link>
+                            </Col>
+                          )}
                         </Row>
                       </ListGroup.Item>
                     );
@@ -207,8 +294,13 @@ function SetorGestor() {
           </Card.Body>
           {loggedUser.user.role === "admin" && (
             <Button variant="secondary">
-              <NavLink href="/adminsetor">
-                <i className="bi bi-arrow-return-left"></i> Voltar
+              <NavLink as={"div"}>
+                <Link
+                  to={"/adminsetor"}
+                  style={{ textDecoration: "none", color: "white" }}
+                >
+                  <i className="bi bi-arrow-return-left"></i> Voltar
+                </Link>
               </NavLink>
             </Button>
           )}

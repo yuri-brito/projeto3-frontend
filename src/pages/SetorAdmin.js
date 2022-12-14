@@ -1,7 +1,16 @@
 import api from "../api/api.js";
 import toast from "react-hot-toast";
 import { useState, useEffect } from "react";
-import { Button, Card, Col, Container, ListGroup, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  FloatingLabel,
+  Form,
+  ListGroup,
+  Row,
+} from "react-bootstrap";
 import SpinnerImage from "../components/SpinnerImage.js";
 import { Link } from "react-router-dom";
 import SetorEdit from "../components/SetorEdit.js";
@@ -11,6 +20,7 @@ import SetorCreate from "../components/SetorCreate.js";
 function SetorAdmin() {
   const [isLoading, setIsLoading] = useState(true);
   const [setorData, setSetorData] = useState({});
+  const [search, setSearch] = useState("");
 
   //api dos dados do setor
   async function fetchingDadosSetor() {
@@ -23,13 +33,16 @@ function SetorAdmin() {
       setSetorData(response.data);
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
       toast.error("Algo deu errado. Tente novamente!");
     }
   }
   useEffect(() => {
     fetchingDadosSetor();
   }, []);
+
+  function handleSearch(e) {
+    setSearch(e.target.value);
+  }
 
   return (
     <>
@@ -56,58 +69,135 @@ function SetorAdmin() {
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
                 <ListGroup.Item
+                  as={"div"}
                   variant="light"
                   style={{ width: "92vw", marginBottom: "20px" }}
                 >
                   <Row>
-                    <Col>Nome setor</Col>
-                    <Col>nome servidor</Col>
-
-                    <Col>Usuários: </Col>
+                    <Col>
+                      <FloatingLabel
+                        label="Filtrar por NOME ou SIGLA do setor"
+                        className="ms-3"
+                      >
+                        <Form.Control
+                          type="text"
+                          value={search}
+                          onChange={handleSearch}
+                          placeholder="..."
+                        />
+                      </FloatingLabel>
+                    </Col>
                     <Col> </Col>
                     <Col>
                       <SetorCreate />
                     </Col>
-                    <Col> </Col>
                   </Row>
                 </ListGroup.Item>
-                {setorData.map((obj, index) => {
-                  return (
-                    <ListGroup.Item
-                      action
-                      variant="light"
-                      style={{ width: "92vw", marginBottom: "10px" }}
-                      key={index}
-                    >
-                      <Row>
-                        <Col>
-                          {obj.sigla} – {obj.nome}
-                        </Col>
-                        {obj.chefe.name && <Col>{obj.chefe.name}</Col>}
-                        {obj.substituto.name && (
-                          <Col>{obj.substituto.name}</Col>
-                        )}
-                        <Col>Usuários: {obj.usuarios.length}</Col>
-                        <Col>
-                          <Button variant="primary" size="sm" className="my-0">
-                            <Link
-                              className="text-white text-decoration-none"
-                              to={`/setor/${obj._id}`}
+
+                {setorData
+                  .filter((setor) => {
+                    return (
+                      setor.nome.toLowerCase().includes(search.toLowerCase()) ||
+                      setor.sigla
+                        .toLowerCase()
+                        .includes(search.toLowerCase()) ||
+                      setor.chefe.name
+                        .toString()
+                        .includes(search.toLowerCase()) ||
+                      setor.substituto.name
+                        .toString()
+                        .includes(search.toLowerCase())
+                    );
+                  })
+                  .map((obj, index) => {
+                    return (
+                      <ListGroup.Item
+                        as={"div"}
+                        action
+                        variant="light"
+                        style={{ width: "92vw", marginBottom: "10px" }}
+                        key={index}
+                      >
+                        <Row>
+                          <Col className="ms-3">
+                            <Row
+                              style={{
+                                fontSize: 11,
+                                fontStyle: "italic",
+                                fontWeight: "bold",
+                              }}
                             >
-                              <i className="bi bi-ticket-detailed"></i> Detalhar
-                            </Link>
-                          </Button>
-                        </Col>
-                        <Col>
-                          <SetorEdit setorData={obj} />
-                        </Col>
-                        <Col>
-                          <SetorDelete setorData={obj} />
-                        </Col>
-                      </Row>
-                    </ListGroup.Item>
-                  );
-                })}
+                              Sigla e Nome
+                            </Row>
+                            <Row>
+                              {obj.sigla} – {obj.nome}
+                            </Row>
+                          </Col>
+                          {obj.chefe.name && (
+                            <Col className="ms-3">
+                              <Row
+                                style={{
+                                  fontSize: 11,
+                                  fontStyle: "italic",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Chefe
+                              </Row>
+                              <Row>{obj.chefe.name}</Row>
+                            </Col>
+                          )}
+                          {obj.substituto.name && (
+                            <Col className="ms-3">
+                              <Row
+                                style={{
+                                  fontSize: 11,
+                                  fontStyle: "italic",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Substituto(a)
+                              </Row>
+                              <Row>{obj.substituto.name}</Row>
+                            </Col>
+                          )}
+                          <Col className="ms-3">
+                            <Row
+                              style={{
+                                fontSize: 11,
+                                fontStyle: "italic",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Quantidade
+                            </Row>
+                            <Row>Usuários: {obj.usuarios.length}</Row>
+                          </Col>
+                          <Col xs={1}>
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              className="my-0"
+                            >
+                              <Link
+                                className="text-white text-decoration-none"
+                                to={`/setor/${obj._id}`}
+                              >
+                                <i className="bi bi-ticket-detailed"></i>{" "}
+                                Detalhar
+                              </Link>
+                            </Button>
+                          </Col>
+                          <Col xs={1}>
+                            <SetorEdit setorData={obj} />
+                          </Col>
+                          <Col xs={1}>
+                            <SetorDelete setorData={obj} />
+                          </Col>
+                        </Row>
+                      </ListGroup.Item>
+                    );
+                  })}
               </ListGroup>
             </Container>
           </Card.Body>

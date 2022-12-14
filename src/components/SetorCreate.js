@@ -80,7 +80,6 @@ const SetorCreate = () => {
     } catch (error) {
       toast.error(error.response.data.msg);
       setIsLoading(false);
-      console.log(error);
     }
   }
 
@@ -96,7 +95,6 @@ const SetorCreate = () => {
       setForm({ ...form, [e.target.name]: e.target.value });
     }
   };
-  console.log(form);
 
   const handleShow = () => {
     setShow(true);
@@ -127,7 +125,7 @@ const SetorCreate = () => {
 
   return (
     <div>
-      <Button className="my-0" variant="success" size="sm" onClick={handleShow}>
+      <Button className="my-3" variant="success" onClick={handleShow}>
         <i className="bi bi-plus-square-dotted"></i> Criar novo setor
       </Button>
 

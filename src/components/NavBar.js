@@ -46,14 +46,14 @@ function NavBar() {
               </Row>
               <Row>
                 <Nav className="ms-4">
-                  <Nav.Link className="px-1 py-0">
+                  <Nav.Link as={"div"} className="px-1 py-0">
                     <Link to="/profile">
                       <Button className="py-0" size="sm" variant="primary">
                         Home?
                       </Button>
                     </Link>
                   </Nav.Link>
-                  <Nav.Link className="px-1 py-0">
+                  <Nav.Link as={"div"} className="px-1 py-0">
                     <Link to="/tarefas" style={{ padding: 0 }}>
                       <Button className="py-0" size="sm" variant="primary">
                         Tarefas
@@ -62,7 +62,7 @@ function NavBar() {
                   </Nav.Link>
                   {loggedUser.user.role === "admin" && (
                     // <Nav.Link href="/adminsetor">Setor</Nav.Link>
-                    <Nav.Link className="px-1 py-0">
+                    <Nav.Link as={"div"} className="px-1 py-0">
                       <Link to="/adminsetor">
                         <Button className="py-0" size="sm" variant="primary">
                           Setores
@@ -71,10 +71,7 @@ function NavBar() {
                     </Nav.Link>
                   )}
                   {loggedUser.user.role === "gestor" && (
-                    // <Nav.Link href={`/setor/${loggedUser.user.setor._id}`}>
-                    //   Setor
-                    // </Nav.Link>
-                    <Nav.Link className="px-1 py-0">
+                    <Nav.Link as={"div"} className="px-1 py-0">
                       <Link to={`/setor/${loggedUser.user.setor._id}`}>
                         <Button className="py-0" size="sm" variant="primary">
                           Setor
@@ -83,8 +80,7 @@ function NavBar() {
                     </Nav.Link>
                   )}
                   {loggedUser.user.role !== "usuario" && (
-                    // <Nav.Link href="/atividades">Atividades</Nav.Link>
-                    <Nav.Link className="px-1 py-0">
+                    <Nav.Link as={"div"} className="px-1 py-0">
                       <Link to="/atividades">
                         <Button className="py-0" size="sm" variant="primary">
                           Atividades
@@ -93,8 +89,7 @@ function NavBar() {
                     </Nav.Link>
                   )}
                   {loggedUser.user.role !== "usuario" && (
-                    // <Nav.Link href="/deducoes">Deduções</Nav.Link>
-                    <Nav.Link className="px-1 py-0">
+                    <Nav.Link as={"div"} className="px-1 py-0">
                       <Link to="/deducoes">
                         <Button className="py-0" size="sm" variant="primary">
                           Deduções
@@ -103,8 +98,7 @@ function NavBar() {
                     </Nav.Link>
                   )}
                   {loggedUser.user.role === "admin" && (
-                    // <Nav.Link href="/usuarios">Usuários</Nav.Link>
-                    <Nav.Link className="px-1 py-0">
+                    <Nav.Link as={"div"} className="px-1 py-0">
                       <Link to="/usuarios">
                         <Button className="py-0" size="sm" variant="primary">
                           Usuários
@@ -121,7 +115,7 @@ function NavBar() {
             <Row className="m-0"> Olá, {loggedUser.user.name} </Row>
             <Row className="m-0 w-50">
               <Col className="px-0 py-0">
-                <Nav.Link className="px-1 py-0 w-100">
+                <Nav.Link as={"div"} className="px-1 py-0 w-100">
                   <Link to="/profile" style={{ textDecoration: "none" }}>
                     <Button className="py-0 w-100" size="sm" variant="success">
                       <i className="bi bi-person"></i> Perfil
@@ -136,7 +130,7 @@ function NavBar() {
                 </Link> */}
               </Col>
               <Col className="px-0 py-0">
-                <Nav.Link className="px-1 py-0 w-100">
+                <Nav.Link as={"div"} className="px-1 py-0 w-100">
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Button
                       onClick={logOut}
@@ -148,13 +142,6 @@ function NavBar() {
                     </Button>
                   </Link>
                 </Nav.Link>
-                {/* <Link
-                  to={"/"}
-                  onClick={logOut}
-                  style={{ textDecoration: "none", color: "grey" }}
-                >
-                  <div>Logout</div>
-                </Link> */}
               </Col>
             </Row>
           </Col>

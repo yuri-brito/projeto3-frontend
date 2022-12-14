@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Modal,
@@ -8,7 +8,6 @@ import {
   Container,
   FloatingLabel,
 } from "react-bootstrap";
-import Select from "react-select";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";

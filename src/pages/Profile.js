@@ -5,7 +5,7 @@ import { AuthContext } from "../contexts/authContext";
 import { parseISO, format } from "date-fns";
 import profilePlaceholder from "../assets/profilePlaceholder.png";
 import TrocaEmail from "../components/TrocaEmail";
-import Footer from "../components/Footer";
+
 function Profile() {
   const { loggedUser, setLoggedUser } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ function Profile() {
     setLoggedUser(null);
     navigate("/");
   }
-  console.log(loggedUser);
+
   return (
     <Container className="mt-5" style={{ animation: "fadein 1.5s" }}>
       <Row>

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Col, Container, Nav, Navbar, Row, Button } from "react-bootstrap";
+import { Col, Nav, Navbar, Row, Button } from "react-bootstrap";
 import { AuthContext } from "../contexts/authContext";
 import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";

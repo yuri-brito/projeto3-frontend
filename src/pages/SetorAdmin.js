@@ -46,7 +46,7 @@ function SetorAdmin() {
   function handleSearch(e) {
     setSearch(e.target.value);
   }
-  console.log(setorData);
+
   return (
     <>
       {isLoading ? (

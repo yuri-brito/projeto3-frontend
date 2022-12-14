@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import Profile from "./pages/Profile";
 import Atividades from "./pages/Atividades";
 import Deducoes from "./pages/Deducoes";
+import Usuarios from "./pages/Usuarios";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,6 +53,10 @@ function App() {
           <Route
             path="/adminsetor"
             element={<ProtectedRoute Component={SetorAdmin} />}
+          />
+          <Route
+            path="/usuarios"
+            element={<ProtectedRoute Component={Usuarios} />}
           />
         </Routes>
         <Footer />

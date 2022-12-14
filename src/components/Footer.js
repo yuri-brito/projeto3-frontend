@@ -1,4 +1,4 @@
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import logoFooter from "../assets/patria_amada.png";
 
 function Footer() {

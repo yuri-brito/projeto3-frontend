@@ -9,8 +9,7 @@ import {
   Row,
 } from "react-bootstrap";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import Select from "react-select";
+
 import api from "../api/api";
 import { AuthContext } from "../contexts/authContext";
 import SpinnerImage from "./SpinnerImage";

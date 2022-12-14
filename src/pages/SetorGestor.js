@@ -13,17 +13,25 @@ import {
   Row,
   OverlayTrigger,
   Tooltip,
+  ProgressBar,
 } from "react-bootstrap";
+import { startOfMonth, endOfMonth, parseISO } from "date-fns";
 import { AuthContext } from "../contexts/authContext";
 import SpinnerImage from "../components/SpinnerImage.js";
 import { Link, useParams } from "react-router-dom";
+import DashGestor from "../components/DashGestor.js";
 
 function SetorGestor() {
   const [isLoading, setIsLoading] = useState(true);
   const [setorData, setSetorData] = useState({});
-  const { loggedUser, setLoggedUser } = useContext(AuthContext);
+  const { loggedUser } = useContext(AuthContext);
   const [search, setSearch] = useState("");
   const { setorId } = useParams();
+  const [datas, setDatas] = useState({
+    dataInicial: startOfMonth(new Date()),
+    dataFinal: endOfMonth(new Date()),
+  });
+  const [metaPeriodo, setMetaPeriodo] = useState(0);
 
   //api dos dados do setor
   async function fetchingDadosSetor() {
@@ -43,20 +51,10 @@ function SetorGestor() {
     fetchingDadosSetor();
   }, []);
 
-  async function handleUserStatus(e, userId) {
-    const newStatus = e === "on" ? false : true;
-
-    try {
-      await api.put(`/user/edit/${userId}`, { active: newStatus });
-    } catch (error) {
-      toast.error("Algo deu errado. Tente novamente!");
-    }
-  }
-
   function handleSearch(e) {
     setSearch(e.target.value);
   }
-  console.log(setorData.usuarios);
+
   return (
     <>
       {isLoading ? (
@@ -84,17 +82,13 @@ function SetorGestor() {
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
                 {loggedUser.user.role === "gestor" && (
-                  <ListGroup.Item
-                    as={"div"}
-                    variant="light"
-                    style={{
-                      width: "92vw",
-                      height: "20vh",
-                      marginBottom: "20px",
-                    }}
-                  >
-                    dashboard do Gestor
-                  </ListGroup.Item>
+                  <DashGestor
+                    setorData={setorData}
+                    datas={datas}
+                    setDatas={setDatas}
+                    metaPeriodo={metaPeriodo}
+                    setMetaPeriodo={setMetaPeriodo}
+                  />
                 )}
 
                 <ListGroup.Item
@@ -243,7 +237,73 @@ function SetorGestor() {
                               >
                                 Tarefas concluídas
                               </Row>
-                              <Row>ProgressBar1</Row>
+
+                              <Row>
+                                {obj.tarefas
+                                  .filter(
+                                    (tarefa) =>
+                                      tarefa.concluida &&
+                                      datas.dataInicial.getTime() <
+                                        parseISO(tarefa.createdAt).getTime() &&
+                                      parseISO(tarefa.createdAt).getTime() <
+                                        datas.dataFinal.getTime()
+                                  )
+                                  .reduce((acc, cur) => {
+                                    return (acc += cur.horas);
+                                  }, 0) === 0 ? (
+                                  <ProgressBar
+                                    animated
+                                    className="me-3 mt-2 p-0 w-75"
+                                    now={0}
+                                    label={`0%`}
+                                  />
+                                ) : (
+                                  <ProgressBar
+                                    animated
+                                    className="me-3 mt-2 p-0 w-75"
+                                    now={Math.round(
+                                      (obj.tarefas
+                                        .filter(
+                                          (tarefa) =>
+                                            tarefa.concluida &&
+                                            datas.dataInicial.getTime() <
+                                              parseISO(
+                                                tarefa.createdAt
+                                              ).getTime() &&
+                                            parseISO(
+                                              tarefa.createdAt
+                                            ).getTime() <
+                                              datas.dataFinal.getTime()
+                                        )
+                                        .reduce((acc, cur) => {
+                                          return (acc += cur.horas);
+                                        }, 0) /
+                                        (metaPeriodo * 8)) *
+                                        100
+                                    )}
+                                    label={`${Math.round(
+                                      (obj.tarefas
+                                        .filter(
+                                          (tarefa) =>
+                                            tarefa.concluida &&
+                                            datas.dataInicial.getTime() <
+                                              parseISO(
+                                                tarefa.createdAt
+                                              ).getTime() &&
+                                            parseISO(
+                                              tarefa.createdAt
+                                            ).getTime() <
+                                              datas.dataFinal.getTime()
+                                        )
+                                        .reduce((acc, cur) => {
+                                          return (acc += cur.horas);
+                                        }, 0) /
+                                        (metaPeriodo * 8)) *
+                                        100
+                                    )}%`}
+                                  />
+                                )}
+                              </Row>
                             </Col>
                           )}
                           {loggedUser.user.role === "gestor" && (
@@ -257,7 +317,74 @@ function SetorGestor() {
                               >
                                 Tarefas validadas
                               </Row>
-                              <Row>ProgressBar2</Row>
+                              <Row>
+                                {obj.tarefas
+                                  .filter(
+                                    (tarefa) =>
+                                      tarefa.validada &&
+                                      datas.dataInicial.getTime() <
+                                        parseISO(tarefa.createdAt).getTime() &&
+                                      parseISO(tarefa.createdAt).getTime() <
+                                        datas.dataFinal.getTime()
+                                  )
+                                  .reduce((acc, cur) => {
+                                    return (acc += cur.horas);
+                                  }, 0) === 0 ? (
+                                  <ProgressBar
+                                    animated
+                                    variant="success"
+                                    className="me-3 mt-2 p-0 w-75"
+                                    now={0}
+                                    label={`0%`}
+                                  />
+                                ) : (
+                                  <ProgressBar
+                                    animated
+                                    variant="success"
+                                    className="me-3 mt-2 p-0 w-75"
+                                    now={Math.round(
+                                      (obj.tarefas
+                                        .filter(
+                                          (tarefa) =>
+                                            tarefa.validada &&
+                                            datas.dataInicial.getTime() <
+                                              parseISO(
+                                                tarefa.createdAt
+                                              ).getTime() &&
+                                            parseISO(
+                                              tarefa.createdAt
+                                            ).getTime() <
+                                              datas.dataFinal.getTime()
+                                        )
+                                        .reduce((acc, cur) => {
+                                          return (acc += cur.horas);
+                                        }, 0) /
+                                        (metaPeriodo * 8)) *
+                                        100
+                                    )}
+                                    label={`${Math.round(
+                                      (obj.tarefas
+                                        .filter(
+                                          (tarefa) =>
+                                            tarefa.validada &&
+                                            datas.dataInicial.getTime() <
+                                              parseISO(
+                                                tarefa.createdAt
+                                              ).getTime() &&
+                                            parseISO(
+                                              tarefa.createdAt
+                                            ).getTime() <
+                                              datas.dataFinal.getTime()
+                                        )
+                                        .reduce((acc, cur) => {
+                                          return (acc += cur.horas);
+                                        }, 0) /
+                                        (metaPeriodo * 8)) *
+                                        100
+                                    )}%`}
+                                  />
+                                )}
+                              </Row>
                             </Col>
                           )}
                           {loggedUser.user.role === "gestor" ? (

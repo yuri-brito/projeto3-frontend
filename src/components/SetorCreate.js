@@ -9,14 +9,12 @@ import {
   Row,
 } from "react-bootstrap";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
 const SetorCreate = ({ reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const [usuarios, setUsuarios] = useState({});

@@ -10,14 +10,12 @@ import {
 } from "react-bootstrap";
 import Select from "react-select";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
 const SetorEdit = ({ setorData, reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [usuarios, setUsuarios] = useState({});
-  const navigate = useNavigate();
 
   async function fetchingUsuarios() {
     try {

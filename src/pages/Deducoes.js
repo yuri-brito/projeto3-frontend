@@ -15,25 +15,25 @@ import {
 } from "react-bootstrap";
 import SpinnerImage from "../components/SpinnerImage.js";
 import { Link, useParams } from "react-router-dom";
-import AtividadeCreate from "../components/AtividadeCreate.js";
-import AtividadeEdit from "../components/AtividadeEdit.js";
-import AtividadeDelete from "../components/AtividadeDelete.js";
+import DeducaoCreate from "../components/DeducaoCreate.js";
+import DeducaoEdit from "../components/DeducaoEdit.js";
+import DeducaoDelete from "../components/DeducaoDelete.js";
 import { AuthContext } from "../contexts/authContext.js";
-function Atividades() {
+function Deducoes() {
   const [isLoading, setIsLoading] = useState(true);
-  const [atividades, setAtividades] = useState([]);
+  const [deducoes, setDeducoes] = useState([]);
   const [search, setSearch] = useState("");
   const [reload, setReload] = useState(true);
   const { loggedUser } = useContext(AuthContext);
   //api dos dados do setor
-  async function fetchingAtividades() {
+  async function fetchingDeducoes() {
     try {
-      const response = await api.get(`/atividade/`);
+      const response = await api.get(`/deducao/`);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
       await tempo(2000);
-      setAtividades(response.data);
+      setDeducoes(response.data);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -41,17 +41,17 @@ function Atividades() {
     }
   }
   useEffect(() => {
-    fetchingAtividades();
+    fetchingDeducoes();
   }, [reload]);
-  async function handleAtividadeStatus(e, atividadeId) {
+  async function handleDeducaoStatus(e, deducoesId) {
     const newStatus = e.target.checked;
 
     try {
-      await api.put(`/atividade/edit/${atividadeId}`, { ativa: newStatus });
+      await api.put(`/deducao/edit/${deducoesId}`, { ativa: newStatus });
       if (newStatus) {
-        toast.success("Atividade ativada para o setor");
+        toast.success("Dedução ativada para o setor");
       } else {
-        toast.success("Atividade desativada para o setor");
+        toast.success("Dedução desativada para o setor");
       }
     } catch (error) {
       console.log(error);
@@ -81,7 +81,7 @@ function Atividades() {
           }}
         >
           <Card.Header>
-            <h4>Gestão das Atividades</h4>
+            <h4>Gestão das Deduções</h4>
           </Card.Header>
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
@@ -95,7 +95,7 @@ function Atividades() {
                   <Row>
                     <Col>
                       <FloatingLabel
-                        label="Filtrar por Título, descrição ou horas esperadas..."
+                        label="Filtrar por Título ou descrição..."
                         className="ms-3"
                       >
                         <Form.Control
@@ -108,25 +108,19 @@ function Atividades() {
                     </Col>
                     <Col className="d-flex justify-content-center align-items-center">
                       {loggedUser.user.role === "gestor" && (
-                        <AtividadeCreate
-                          reload={reload}
-                          setReload={setReload}
-                        />
+                        <DeducaoCreate reload={reload} setReload={setReload} />
                       )}
                     </Col>
                   </Row>
                 </ListGroup.Item>
-                {atividades
-                  .filter((atividade) => {
+                {deducoes
+                  .filter((deducao) => {
                     return (
-                      atividade.titulo
+                      deducao.titulo
                         .toLowerCase()
                         .includes(search.toLowerCase()) ||
-                      atividade.descricao
+                      deducao.descricao
                         .toLowerCase()
-                        .includes(search.toLowerCase()) ||
-                      atividade.horasEsperadas
-                        .toString()
                         .includes(search.toLowerCase())
                     );
                   })
@@ -182,7 +176,7 @@ function Atividades() {
                               </Row>
                             )}
                           </Col>
-                          <Col className="col-2 ms-3">
+                          <Col className="col-4 ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -194,7 +188,7 @@ function Atividades() {
                             </Row>
                             {obj.descricao && (
                               <div>
-                                {obj.descricao.length < 15 ? (
+                                {obj.descricao.length < 40 ? (
                                   <Row style={{ textAlign: "left" }}>
                                     {obj.descricao}
                                   </Row>
@@ -215,26 +209,12 @@ function Atividades() {
                                           textAlign: "left",
                                         }}
                                       >
-                                        {obj.descricao.slice(0, 15)}...
+                                        {obj.descricao.slice(0, 40)}...
                                       </Card.Text>
                                     </OverlayTrigger>
                                   </Row>
                                 )}
                               </div>
-                            )}
-                          </Col>
-                          <Col className="col-2 ms-3">
-                            <Row
-                              style={{
-                                fontSize: 11,
-                                fontStyle: "italic",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              Horas Estimadas
-                            </Row>
-                            {obj.horasEsperadas && (
-                              <Row>{obj.horasEsperadas}</Row>
                             )}
                           </Col>
                           <Col className="col-1 ms-3">
@@ -254,7 +234,7 @@ function Atividades() {
                                 type="checkbox"
                                 defaultChecked={obj.ativa}
                                 onChange={(e) =>
-                                  handleAtividadeStatus(e, obj._id)
+                                  handleDeducaoStatus(e, obj._id)
                                 }
                               ></Form.Check>
                               {obj.active}
@@ -262,15 +242,15 @@ function Atividades() {
                           </Col>
 
                           <Col className="col-2 d-flex justify-content-center align-items-end">
-                            <AtividadeEdit
-                              atividadeData={obj}
+                            <DeducaoEdit
+                              deducaoData={obj}
                               reload={reload}
                               setReload={setReload}
                             />
                           </Col>
                           <Col className="col-2 d-flex justify-content-center align-items-end">
-                            <AtividadeDelete
-                              atividadeData={obj}
+                            <DeducaoDelete
+                              deducaoData={obj}
                               reload={reload}
                               setReload={setReload}
                             />
@@ -288,4 +268,4 @@ function Atividades() {
   );
 }
 
-export default Atividades;
+export default Deducoes;

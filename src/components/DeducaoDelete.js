@@ -5,19 +5,19 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
-const AtividadeDelete = ({ atividadeData, reload, setReload }) => {
+const DeducaoDelete = ({ deducaoData, reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   async function deleteAtividade() {
     try {
       setIsLoading(true);
-      await api.delete(`/atividade/delete/${atividadeData._id}`);
+      await api.delete(`/deducao/delete/${deducaoData._id}`);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
       await tempo(2000);
-      toast.success(`Atividade ${atividadeData.titulo} excluída com sucesso.`, {
+      toast.success(`Dedução ${deducaoData.titulo} excluída com sucesso.`, {
         duration: 7000,
       });
       handleClose();
@@ -50,7 +50,7 @@ const AtividadeDelete = ({ atividadeData, reload, setReload }) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{`Deletar ${atividadeData.titulo}`}</Modal.Title>
+          <Modal.Title>{`Deletar ${deducaoData.titulo}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -89,4 +89,4 @@ const AtividadeDelete = ({ atividadeData, reload, setReload }) => {
   );
 };
 
-export default AtividadeDelete;
+export default DeducaoDelete;

@@ -15,15 +15,13 @@ import api from "../api/api";
 import { AuthContext } from "../contexts/authContext";
 import SpinnerImage from "./SpinnerImage";
 
-const AtividadeCreate = ({ reload, setReload }) => {
+const DeducaoCreate = ({ reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const { loggedUser, setLoggedeUser } = useContext(AuthContext);
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     titulo: "",
     descricao: "",
-    horasEsperadas: "",
   });
 
   async function handleSubmit(e) {
@@ -38,13 +36,13 @@ const AtividadeCreate = ({ reload, setReload }) => {
 
     try {
       setIsLoading(true);
-      await api.post(`/atividade/create/${loggedUser.user.setor._id}`, form);
+      await api.post(`/deducao/create/${loggedUser.user.setor._id}`, form);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
       await tempo(2000);
       setIsLoading(false);
-      toast.success(`Nova atividade ${form.titulo} criada com sucesso.`, {
+      toast.success(`Nova dedução ${form.titulo} criada com sucesso.`, {
         duration: 7000,
       });
       handleClose();
@@ -66,7 +64,7 @@ const AtividadeCreate = ({ reload, setReload }) => {
 
   const handleClose = () => {
     setShow(false);
-    setForm({ titulo: "", descricao: "", horasEsperadas: "" });
+    setForm({ titulo: "", descricao: "" });
   };
 
   const colourStyles = {
@@ -90,7 +88,7 @@ const AtividadeCreate = ({ reload, setReload }) => {
   return (
     <div>
       <Button className="my-0" variant="success" size="sm" onClick={handleShow}>
-        <i className="bi bi-plus-square-dotted"></i> Criar nova atividade
+        <i className="bi bi-plus-square-dotted"></i> Criar nova dedução
       </Button>
 
       <Modal
@@ -100,7 +98,7 @@ const AtividadeCreate = ({ reload, setReload }) => {
         keyboard={false}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Cadastrar nova atividade</Modal.Title>
+          <Modal.Title>Cadastrar nova dedução</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Container>
@@ -111,10 +109,7 @@ const AtividadeCreate = ({ reload, setReload }) => {
                 <Row>
                   <Col className="d-flex justify-content-center align-items-center">
                     <Form.Group className="ms-3 mb-3 w-100">
-                      <FloatingLabel
-                        label="Título da atividade"
-                        className="mb-3"
-                      >
+                      <FloatingLabel label="Título da dedução" className="mb-3">
                         <Form.Control
                           type="text"
                           name="titulo"
@@ -123,21 +118,13 @@ const AtividadeCreate = ({ reload, setReload }) => {
                         />
                       </FloatingLabel>
                       <FloatingLabel
-                        label="Descrição da atividade"
+                        label="Descrição da dedução"
                         className="mb-3"
                       >
                         <Form.Control
                           type="textarea"
                           name="descricao"
                           value={form.descricao}
-                          onChange={handleChange}
-                        />
-                      </FloatingLabel>
-                      <FloatingLabel label="Horas estimadas" className="mb-3">
-                        <Form.Control
-                          type="number"
-                          name="horasEsperadas"
-                          value={form.horasEsperadas}
                           onChange={handleChange}
                         />
                       </FloatingLabel>
@@ -174,4 +161,4 @@ const AtividadeCreate = ({ reload, setReload }) => {
   );
 };
 
-export default AtividadeCreate;
+export default DeducaoCreate;

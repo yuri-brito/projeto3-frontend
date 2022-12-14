@@ -14,7 +14,7 @@ import Select from "react-select";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
-const SetorCreate = () => {
+const SetorCreate = ({ reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -75,8 +75,9 @@ const SetorCreate = () => {
           duration: 7000,
         }
       );
-      navigate(0);
+
       handleClose();
+      setReload(!reload);
     } catch (error) {
       toast.error(error.response.data.msg);
       setIsLoading(false);
@@ -125,7 +126,7 @@ const SetorCreate = () => {
 
   return (
     <div>
-      <Button className="my-3" variant="success" onClick={handleShow}>
+      <Button className="my-3" variant="success" size="sm" onClick={handleShow}>
         <i className="bi bi-plus-square-dotted"></i> Criar novo setor
       </Button>
 

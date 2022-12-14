@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
-const SetorEdit = ({ setorData }) => {
+const SetorEdit = ({ setorData, reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [usuarios, setUsuarios] = useState({});
   const navigate = useNavigate();
@@ -95,8 +95,9 @@ const SetorEdit = ({ setorData }) => {
       toast.success(`Dados de ${setorData.sigla} alterados com sucesso.`, {
         duration: 7000,
       });
-      navigate(0);
+
       handleClose();
+      setReload(!reload);
     } catch (error) {
       toast.error(error.response.data.msg);
       setIsLoading(false);

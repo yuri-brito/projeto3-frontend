@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
-const SetorDelete = ({ setorData }) => {
+const SetorDelete = ({ setorData, reload, setReload }) => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const SetorDelete = ({ setorData }) => {
         }
       );
       handleClose();
-      navigate(0);
+      setReload(!reload);
     } catch (error) {
       console.log(error);
       toast.error("Algo deu errado. Tente novamente!");

@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { Col, Container, Row, Form, ProgressBar } from "react-bootstrap";
-import { parseISO, format, differenceInBusinessDays } from "date-fns";
+import {
+  parseISO,
+  format,
+  differenceInBusinessDays,
+  getDay,
+  getYear,
+  getMonth,
+  getDate,
+} from "date-fns";
 const DashGestor = ({
   setorData,
   datas,
@@ -9,8 +17,13 @@ const DashGestor = ({
   setMetaPeriodo,
 }) => {
   const [dados, setDados] = useState({ somaConcluidas: 0, somaValidadas: 0 });
-
+  const [minDate, setMinDate] = useState(
+    format(datas.dataInicial, "yyyy-MM-dd")
+  );
   function handleChange(e) {
+    if (e.target.name === "dataInicial") {
+      setMinDate(e.target.value);
+    }
     setDatas({
       ...datas,
       [e.target.name]: parseISO(e.target.value, "yyyy-MM-dd"),
@@ -25,9 +38,17 @@ const DashGestor = ({
         .filter((tarefa) => {
           return (
             tarefa.concluida &&
-            datas.dataInicial.getTime() <
-              parseISO(tarefa.createdAt).getTime() &&
-            parseISO(tarefa.createdAt).getTime() < datas.dataFinal.getTime()
+            datas.dataInicial.getTime() <=
+              new Date(
+                getYear(parseISO(tarefa.createdAt)),
+                getMonth(parseISO(tarefa.createdAt)),
+                getDate(parseISO(tarefa.createdAt))
+              ).getTime() &&
+            new Date(
+              getYear(parseISO(tarefa.createdAt)),
+              getMonth(parseISO(tarefa.createdAt)),
+              getDate(parseISO(tarefa.createdAt))
+            ).getTime() <= datas.dataFinal.getTime()
           );
         })
         .reduce((acc, cur) => {
@@ -37,9 +58,17 @@ const DashGestor = ({
         .filter(
           (tarefa) =>
             tarefa.validada &&
-            datas.dataInicial.getTime() <
-              parseISO(tarefa.createdAt).getTime() &&
-            parseISO(tarefa.createdAt).getTime() < datas.dataFinal.getTime()
+            datas.dataInicial.getTime() <=
+              new Date(
+                getYear(parseISO(tarefa.createdAt)),
+                getMonth(parseISO(tarefa.createdAt)),
+                getDate(parseISO(tarefa.createdAt))
+              ).getTime() &&
+            new Date(
+              getYear(parseISO(tarefa.createdAt)),
+              getMonth(parseISO(tarefa.createdAt)),
+              getDate(parseISO(tarefa.createdAt))
+            ).getTime() <= datas.dataFinal.getTime()
         )
         .reduce((acc, cur) => {
           return (acc += cur.horas);
@@ -47,9 +76,15 @@ const DashGestor = ({
     });
 
     setDados({ somaConcluidas: somaCon, somaValidadas: somaVal });
-    setMetaPeriodo(
-      differenceInBusinessDays(datas.dataFinal, datas.dataInicial)
-    );
+    if ([1, 2, 3, 4, 5].includes(getDay(datas.dataFinal))) {
+      setMetaPeriodo(
+        differenceInBusinessDays(datas.dataFinal, datas.dataInicial) + 1
+      );
+    } else {
+      setMetaPeriodo(
+        differenceInBusinessDays(datas.dataFinal, datas.dataInicial)
+      );
+    }
   }
   useEffect(() => {
     calculaMeta();
@@ -89,6 +124,7 @@ const DashGestor = ({
               <Form.Control
                 className="w-75"
                 size="sm"
+                min={minDate}
                 type="date"
                 name="dataFinal"
                 placeholder="Small text"

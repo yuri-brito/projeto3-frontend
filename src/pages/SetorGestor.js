@@ -15,7 +15,14 @@ import {
   Tooltip,
   ProgressBar,
 } from "react-bootstrap";
-import { startOfMonth, endOfMonth, parseISO } from "date-fns";
+import {
+  startOfMonth,
+  endOfMonth,
+  parseISO,
+  getYear,
+  getMonth,
+  getDate,
+} from "date-fns";
 import { AuthContext } from "../contexts/authContext";
 import SpinnerImage from "../components/SpinnerImage.js";
 import { Link, useParams } from "react-router-dom";
@@ -243,10 +250,17 @@ function SetorGestor() {
                                   .filter(
                                     (tarefa) =>
                                       tarefa.concluida &&
-                                      datas.dataInicial.getTime() <
-                                        parseISO(tarefa.createdAt).getTime() &&
-                                      parseISO(tarefa.createdAt).getTime() <
-                                        datas.dataFinal.getTime()
+                                      datas.dataInicial.getTime() <=
+                                        new Date(
+                                          getYear(parseISO(tarefa.createdAt)),
+                                          getMonth(parseISO(tarefa.createdAt)),
+                                          getDate(parseISO(tarefa.createdAt))
+                                        ).getTime() &&
+                                      new Date(
+                                        getYear(parseISO(tarefa.createdAt)),
+                                        getMonth(parseISO(tarefa.createdAt)),
+                                        getDate(parseISO(tarefa.createdAt))
+                                      ).getTime() <= datas.dataFinal.getTime()
                                   )
                                   .reduce((acc, cur) => {
                                     return (acc += cur.horas);
@@ -266,13 +280,29 @@ function SetorGestor() {
                                         .filter(
                                           (tarefa) =>
                                             tarefa.concluida &&
-                                            datas.dataInicial.getTime() <
-                                              parseISO(
-                                                tarefa.createdAt
+                                            datas.dataInicial.getTime() <=
+                                              new Date(
+                                                getYear(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getMonth(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getDate(
+                                                  parseISO(tarefa.createdAt)
+                                                )
                                               ).getTime() &&
-                                            parseISO(
-                                              tarefa.createdAt
-                                            ).getTime() <
+                                            new Date(
+                                              getYear(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getMonth(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getDate(
+                                                parseISO(tarefa.createdAt)
+                                              )
+                                            ).getTime() <=
                                               datas.dataFinal.getTime()
                                         )
                                         .reduce((acc, cur) => {
@@ -286,13 +316,29 @@ function SetorGestor() {
                                         .filter(
                                           (tarefa) =>
                                             tarefa.concluida &&
-                                            datas.dataInicial.getTime() <
-                                              parseISO(
-                                                tarefa.createdAt
+                                            datas.dataInicial.getTime() <=
+                                              new Date(
+                                                getYear(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getMonth(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getDate(
+                                                  parseISO(tarefa.createdAt)
+                                                )
                                               ).getTime() &&
-                                            parseISO(
-                                              tarefa.createdAt
-                                            ).getTime() <
+                                            new Date(
+                                              getYear(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getMonth(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getDate(
+                                                parseISO(tarefa.createdAt)
+                                              )
+                                            ).getTime() <=
                                               datas.dataFinal.getTime()
                                         )
                                         .reduce((acc, cur) => {
@@ -322,10 +368,17 @@ function SetorGestor() {
                                   .filter(
                                     (tarefa) =>
                                       tarefa.validada &&
-                                      datas.dataInicial.getTime() <
-                                        parseISO(tarefa.createdAt).getTime() &&
-                                      parseISO(tarefa.createdAt).getTime() <
-                                        datas.dataFinal.getTime()
+                                      datas.dataInicial.getTime() <=
+                                        new Date(
+                                          getYear(parseISO(tarefa.createdAt)),
+                                          getMonth(parseISO(tarefa.createdAt)),
+                                          getDate(parseISO(tarefa.createdAt))
+                                        ).getTime() &&
+                                      new Date(
+                                        getYear(parseISO(tarefa.createdAt)),
+                                        getMonth(parseISO(tarefa.createdAt)),
+                                        getDate(parseISO(tarefa.createdAt))
+                                      ).getTime() <= datas.dataFinal.getTime()
                                   )
                                   .reduce((acc, cur) => {
                                     return (acc += cur.horas);
@@ -347,13 +400,29 @@ function SetorGestor() {
                                         .filter(
                                           (tarefa) =>
                                             tarefa.validada &&
-                                            datas.dataInicial.getTime() <
-                                              parseISO(
-                                                tarefa.createdAt
+                                            datas.dataInicial.getTime() <=
+                                              new Date(
+                                                getYear(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getMonth(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getDate(
+                                                  parseISO(tarefa.createdAt)
+                                                )
                                               ).getTime() &&
-                                            parseISO(
-                                              tarefa.createdAt
-                                            ).getTime() <
+                                            new Date(
+                                              getYear(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getMonth(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getDate(
+                                                parseISO(tarefa.createdAt)
+                                              )
+                                            ).getTime() <=
                                               datas.dataFinal.getTime()
                                         )
                                         .reduce((acc, cur) => {
@@ -367,13 +436,29 @@ function SetorGestor() {
                                         .filter(
                                           (tarefa) =>
                                             tarefa.validada &&
-                                            datas.dataInicial.getTime() <
-                                              parseISO(
-                                                tarefa.createdAt
+                                            datas.dataInicial.getTime() <=
+                                              new Date(
+                                                getYear(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getMonth(
+                                                  parseISO(tarefa.createdAt)
+                                                ),
+                                                getDate(
+                                                  parseISO(tarefa.createdAt)
+                                                )
                                               ).getTime() &&
-                                            parseISO(
-                                              tarefa.createdAt
-                                            ).getTime() <
+                                            new Date(
+                                              getYear(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getMonth(
+                                                parseISO(tarefa.createdAt)
+                                              ),
+                                              getDate(
+                                                parseISO(tarefa.createdAt)
+                                              )
+                                            ).getTime() <=
                                               datas.dataFinal.getTime()
                                         )
                                         .reduce((acc, cur) => {

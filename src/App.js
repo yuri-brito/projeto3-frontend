@@ -16,6 +16,7 @@ import Atividades from "./pages/Atividades";
 import Deducoes from "./pages/Deducoes";
 import Usuarios from "./pages/Usuarios";
 import TarefasGestor from "./pages/TarefasGestor";
+import Home from "./pages/Home";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,6 +32,7 @@ function App() {
             path="/atividades"
             element={<ProtectedRoute Component={Atividades} />}
           />
+          <Route path="/home" element={<ProtectedRoute Component={Home} />} />
           <Route
             path="/deducoes"
             element={<ProtectedRoute Component={Deducoes} />}

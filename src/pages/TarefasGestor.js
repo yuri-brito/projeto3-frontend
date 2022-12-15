@@ -45,7 +45,7 @@ function TarefasGestor() {
   //api dos dados do setor
   async function fetchingDadosUser() {
     try {
-      const response = await api.get(`/tarefa/usuario/${userId}`);
+      const response = await api.get(`/user/one-user/${userId}`);
       // const tempo = (ms) => {
       //   return new Promise((resolve) => setTimeout(resolve, ms));
       // };
@@ -79,7 +79,7 @@ function TarefasGestor() {
       toast.error("Algo deu errado. Tente novamente!");
     }
   }
-
+  console.log(userData);
   return (
     <>
       {isLoading ? (
@@ -99,18 +99,27 @@ function TarefasGestor() {
           }}
         >
           <Card.Header>
-            <h4></h4>
+            <Row>
+              <Col className="d-flex flex-column align-items-center justify-content-center">
+                <h4>{userData.name}</h4>
+              </Col>
+              <Col className="d-flex flex-column align-items-center justify-content-center">
+                <h6>{userData.email}</h6>
+              </Col>
+            </Row>
           </Card.Header>
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
               <ListGroup>
-                <DashUser
-                  userData={userData}
-                  datas={datas}
-                  setDatas={setDatas}
-                  metaPeriodo={metaPeriodo}
-                  setMetaPeriodo={setMetaPeriodo}
-                />
+                {loggedUser.user.role === "gestor" && (
+                  <DashUser
+                    userData={userData.tarefas}
+                    datas={datas}
+                    setDatas={setDatas}
+                    metaPeriodo={metaPeriodo}
+                    setMetaPeriodo={setMetaPeriodo}
+                  />
+                )}
                 <ListGroup.Item
                   as={"div"}
                   variant="light"
@@ -133,20 +142,24 @@ function TarefasGestor() {
                   </Row>
                 </ListGroup.Item>
 
-                {userData
+                {userData.tarefas
                   .filter((tarefa) => {
                     let titulo = "";
+                    let obs = "";
                     if (tarefa.atividade) {
                       titulo = tarefa.atividade.titulo;
                     }
                     if (tarefa.deducao) {
                       titulo = tarefa.deducao.titulo;
                     }
+                    if (tarefa.observacao) {
+                      obs = tarefa.observacao;
+                    } else {
+                      obs = "-";
+                    }
                     return (
                       titulo.toLowerCase().includes(search.toLowerCase()) ||
-                      tarefa.observacao
-                        .toLowerCase()
-                        .includes(search.toLowerCase()) ||
+                      obs.toLowerCase().includes(search.toLowerCase()) ||
                       tarefa.horas.toString().includes(search.toLowerCase())
                     );
                   })
@@ -306,51 +319,76 @@ function TarefasGestor() {
                               <Form.Check
                                 className="p-0"
                                 isValid
+                                readOnly
                                 style={{ textAlign: "left" }}
                                 type="checkbox"
                                 checked={obj.concluida}
                               ></Form.Check>
                             </Row>
                           </Col>
-
+                          {loggedUser.user.role === "admin" && (
+                            <Col className="col-1 ms-3">
+                              <Row
+                                style={{
+                                  fontSize: 11,
+                                  fontStyle: "italic",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Validada
+                              </Row>
+                              <Row>
+                                <Form.Check
+                                  className="p-0"
+                                  isValid
+                                  readOnly
+                                  style={{ textAlign: "left" }}
+                                  type="checkbox"
+                                  checked={obj.validada}
+                                ></Form.Check>
+                              </Row>
+                            </Col>
+                          )}
                           <Col className="d-flex justify-content-center align-items-end">
                             <TarefaDetail tarefaData={obj} />
                           </Col>
-                          <Col className="col-1 ms-3">
-                            <Row
-                              style={{
-                                fontSize: 11,
-                                fontStyle: "italic",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              Validada
-                            </Row>
-                            <Row>
-                              {obj.concluida ? (
-                                <Form.Check
-                                  className="p-0"
-                                  style={{ textAlign: "left" }}
-                                  type="checkbox"
-                                  defaultChecked={obj.validada}
-                                  onChange={(e) =>
-                                    handleValidadaStatus(e, obj._id)
-                                  }
-                                ></Form.Check>
-                              ) : (
-                                <Form.Check
-                                  disabled
-                                  className="p-0"
-                                  style={{ textAlign: "left" }}
-                                  type="checkbox"
-                                  defaultChecked={obj.validada}
-                                  onChange={(e) =>
-                                    handleValidadaStatus(e, obj._id)
-                                  }
-                                ></Form.Check>
-                              )}
-                            </Row>
-                          </Col>
+                          {loggedUser.user.role === "gestor" && (
+                            <Col className="col-1 ms-3">
+                              <Row
+                                style={{
+                                  fontSize: 11,
+                                  fontStyle: "italic",
+                                  fontWeight: "bold",
+                                }}
+                              >
+                                Validada
+                              </Row>
+                              <Row>
+                                {obj.concluida ? (
+                                  <Form.Check
+                                    className="p-0"
+                                    style={{ textAlign: "left" }}
+                                    type="checkbox"
+                                    defaultChecked={obj.validada}
+                                    onChange={(e) =>
+                                      handleValidadaStatus(e, obj._id)
+                                    }
+                                  ></Form.Check>
+                                ) : (
+                                  <Form.Check
+                                    disabled
+                                    className="p-0"
+                                    style={{ textAlign: "left" }}
+                                    type="checkbox"
+                                    defaultChecked={obj.validada}
+                                    onChange={(e) =>
+                                      handleValidadaStatus(e, obj._id)
+                                    }
+                                  ></Form.Check>
+                                )}
+                              </Row>
+                            </Col>
+                          )}
                         </Row>
                       </ListGroup.Item>
                     );

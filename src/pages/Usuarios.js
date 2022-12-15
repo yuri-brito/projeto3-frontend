@@ -166,8 +166,8 @@ const Usuarios = () => {
                         }}
                         key={index}
                       >
-                        <Row>
-                          <Col className="col-2 ms-3">
+                        <Row className="w-100">
+                          <Col className=" ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -204,7 +204,7 @@ const Usuarios = () => {
                               </Row>
                             )}
                           </Col>
-                          <Col className="col-2 ms-3">
+                          <Col className=" ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -245,7 +245,7 @@ const Usuarios = () => {
                               </div>
                             )}
                           </Col>
-                          <Col className="col-2 ms-3">
+                          <Col className=" ms-3">
                             <Row
                               style={{
                                 fontSize: 11,
@@ -316,7 +316,7 @@ const Usuarios = () => {
                             </Row>
                           </Col>
 
-                          <Col className="col-1 d-flex justify-content-center align-items-end">
+                          <Col className=" d-flex justify-content-center align-items-end">
                             <UsuarioEdit
                               usuarioData={obj}
                               reload={reload}
@@ -324,7 +324,7 @@ const Usuarios = () => {
                               setoresData={setoresData}
                             />
                           </Col>
-                          <Col className="col-1 d-flex justify-content-center align-items-end">
+                          <Col className=" d-flex justify-content-center align-items-end">
                             <UsuarioDelete
                               usuarioData={obj}
                               reload={reload}

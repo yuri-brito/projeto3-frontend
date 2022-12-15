@@ -387,31 +387,17 @@ function SetorGestor() {
                               </Row>
                             </Col>
                           )}
-                          {loggedUser.user.role === "gestor" ? (
-                            <Col className="d-flex justify-content-center align-items-end">
-                              <Link
-                                to={`/tarefas/${obj._id}`}
-                                style={{ textDecoration: "none" }}
-                              >
-                                <Button variant="primary" size="sm">
-                                  <i className="bi bi-ticket-detailed"></i>{" "}
-                                  Detalhar
-                                </Button>
-                              </Link>
-                            </Col>
-                          ) : (
-                            <Col className="d-flex justify-content-center align-items-end">
-                              <Link
-                                to="/user/detail"
-                                style={{ textDecoration: "none" }}
-                              >
-                                <Button variant="primary" size="sm">
-                                  <i className="bi bi-ticket-detailed"></i>{" "}
-                                  Detalhar
-                                </Button>
-                              </Link>
-                            </Col>
-                          )}
+                          <Col className="d-flex justify-content-center align-items-end">
+                            <Link
+                              to={`/tarefas/${obj._id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <Button variant="primary" size="sm">
+                                <i className="bi bi-ticket-detailed"></i>{" "}
+                                Detalhar
+                              </Button>
+                            </Link>
+                          </Col>
                         </Row>
                       </ListGroup.Item>
                     );

@@ -29,7 +29,7 @@ function NavBar() {
           style={{ animation: "fadein 1.5s" }}
         >
           <Col className="d-flex flex-row align-items-end justify-content-end">
-            <Col>
+            <Col className="col-3">
               <img alt="SisPro logo" src={logo} width="100" height="80" />
             </Col>
             <Col className="d-flex flex-column align-items-start justify-content-center">
@@ -47,9 +47,9 @@ function NavBar() {
               <Row>
                 <Nav className="ms-4">
                   <Nav.Link as={"div"} className="px-1 py-0">
-                    <Link to="/profile">
+                    <Link to="/home">
                       <Button className="py-0" size="sm" variant="primary">
-                        Home?
+                        <i className="bi bi-house-door"></i>
                       </Button>
                     </Link>
                   </Nav.Link>
@@ -113,8 +113,8 @@ function NavBar() {
 
           <Col className="d-flex flex-column align-items-end justify-content-center">
             <Row className="m-0"> Olá, {loggedUser.user.name} </Row>
-            <Row className="m-0 w-50">
-              <Col className="px-0 py-0">
+            <Row className="m-0 w-50 d-flex flex-row align-items-end justify-content-end">
+              <Col className=" col-5 px-0 py-0">
                 <Nav.Link as={"div"} className="px-1 py-0 w-100">
                   <Link to="/profile" style={{ textDecoration: "none" }}>
                     <Button className="py-0 w-100" size="sm" variant="success">
@@ -129,7 +129,7 @@ function NavBar() {
                   <div>Perfil</div>
                 </Link> */}
               </Col>
-              <Col className="px-0 py-0">
+              <Col className="col-4 px-0 py-0">
                 <Nav.Link as={"div"} className="px-1 py-0 w-100">
                   <Link to="/" style={{ textDecoration: "none" }}>
                     <Button

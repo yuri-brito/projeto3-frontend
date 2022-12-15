@@ -390,7 +390,7 @@ function SetorGestor() {
                           {loggedUser.user.role === "gestor" ? (
                             <Col className="d-flex justify-content-center align-items-end">
                               <Link
-                                to="/tarefa/detail"
+                                to={`/tarefas/${obj._id}`}
                                 style={{ textDecoration: "none" }}
                               >
                                 <Button variant="primary" size="sm">

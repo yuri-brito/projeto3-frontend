@@ -16,22 +16,24 @@ const DashGestor = ({
       [e.target.name]: parseISO(e.target.value, "yyyy-MM-dd"),
     });
   }
-  let somaCon = 0;
-  let somaVal = 0;
+
   async function calculaMeta() {
+    let somaCon = 0;
+    let somaVal = 0;
     await setorData.usuarios.forEach((usuario) => {
-      somaCon = usuario.tarefas
-        .filter(
-          (tarefa) =>
+      somaCon += usuario.tarefas
+        .filter((tarefa) => {
+          return (
             tarefa.concluida &&
             datas.dataInicial.getTime() <
               parseISO(tarefa.createdAt).getTime() &&
             parseISO(tarefa.createdAt).getTime() < datas.dataFinal.getTime()
-        )
+          );
+        })
         .reduce((acc, cur) => {
           return (acc += cur.horas);
         }, 0);
-      somaVal = usuario.tarefas
+      somaVal += usuario.tarefas
         .filter(
           (tarefa) =>
             tarefa.validada &&
@@ -43,6 +45,7 @@ const DashGestor = ({
           return (acc += cur.horas);
         }, 0);
     });
+
     setDados({ somaConcluidas: somaCon, somaValidadas: somaVal });
     setMetaPeriodo(
       differenceInBusinessDays(datas.dataFinal, datas.dataInicial)

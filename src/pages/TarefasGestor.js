@@ -24,11 +24,12 @@ import TarefaCreate from "../components/TarefaCreate.js";
 import TarefaEdit from "../components/TarefaEdit.js";
 import TarefaDelete from "../components/TarefaDelete.js";
 import TarefaDetail from "../components/TarefaDetail.js";
+import { useNavigate } from "react-router-dom";
 
-function Tarefas() {
+function TarefasGestor() {
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({});
-  const { loggedUser } = useContext(AuthContext);
+  const { loggedUser, setLoggedUser } = useContext(AuthContext);
   const [search, setSearch] = useState("");
   const [reload, setReload] = useState(true);
   const [datas, setDatas] = useState({
@@ -36,11 +37,15 @@ function Tarefas() {
     dataFinal: endOfMonth(new Date()),
   });
   const [metaPeriodo, setMetaPeriodo] = useState(0);
-
+  const { userId } = useParams();
+  const navigate = useNavigate();
+  if (loggedUser.user._id === userId) {
+    navigate("/tarefas");
+  }
   //api dos dados do setor
   async function fetchingDadosUser() {
     try {
-      const response = await api.get(`/tarefa/lista`);
+      const response = await api.get(`/tarefa/usuario/${userId}`);
       // const tempo = (ms) => {
       //   return new Promise((resolve) => setTimeout(resolve, ms));
       // };
@@ -48,7 +53,7 @@ function Tarefas() {
       setUserData(response.data);
       setIsLoading(false);
     } catch (error) {
-      toast.error("Algo deu errado. Tente novamente!");
+      toast.error(error.response.data.msg);
     }
   }
   useEffect(() => {
@@ -58,15 +63,15 @@ function Tarefas() {
   function handleSearch(e) {
     setSearch(e.target.value);
   }
-  async function handleConcluidaStatus(e, tarefaId) {
+  async function handleValidadaStatus(e, tarefaId) {
     const newStatus = e.target.checked;
 
     try {
-      await api.put(`/tarefa/edit/${tarefaId}`, { concluida: newStatus });
+      await api.put(`/tarefa/edit/${tarefaId}`, { validada: newStatus });
       if (newStatus) {
-        toast.success("Conclusão cadastrada");
+        toast.success("Validação cadastrada");
       } else {
-        toast.success("Conclusão descadastrada");
+        toast.success("Validação descadastrada");
       }
       setReload(!reload);
     } catch (error) {
@@ -94,7 +99,7 @@ function Tarefas() {
           }}
         >
           <Card.Header>
-            <h4>{loggedUser.user.name}</h4>
+            <h4></h4>
           </Card.Header>
           <Card.Body>
             <Container className="d-flex flex-column align-items-center justify-content-center">
@@ -124,9 +129,6 @@ function Tarefas() {
                           placeholder="..."
                         />
                       </FloatingLabel>
-                    </Col>
-                    <Col className="col-6 d-flex justify-content-center align-items-center">
-                      <TarefaCreate reload={reload} setReload={setReload} />
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -303,12 +305,10 @@ function Tarefas() {
                             <Row>
                               <Form.Check
                                 className="p-0"
+                                isValid
                                 style={{ textAlign: "left" }}
                                 type="checkbox"
                                 checked={obj.concluida}
-                                onChange={(e) =>
-                                  handleConcluidaStatus(e, obj._id)
-                                }
                               ></Form.Check>
                             </Row>
                           </Col>
@@ -316,19 +316,40 @@ function Tarefas() {
                           <Col className="d-flex justify-content-center align-items-end">
                             <TarefaDetail tarefaData={obj} />
                           </Col>
-                          <Col className="d-flex justify-content-center align-items-end">
-                            <TarefaEdit
-                              tarefaData={obj}
-                              reload={reload}
-                              setReload={setReload}
-                            />
-                          </Col>
-                          <Col className="d-flex justify-content-center align-items-end">
-                            <TarefaDelete
-                              tarefaData={obj}
-                              reload={reload}
-                              setReload={setReload}
-                            />
+                          <Col className="col-1 ms-3">
+                            <Row
+                              style={{
+                                fontSize: 11,
+                                fontStyle: "italic",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              Validada
+                            </Row>
+                            <Row>
+                              {obj.concluida ? (
+                                <Form.Check
+                                  className="p-0"
+                                  style={{ textAlign: "left" }}
+                                  type="checkbox"
+                                  defaultChecked={obj.validada}
+                                  onChange={(e) =>
+                                    handleValidadaStatus(e, obj._id)
+                                  }
+                                ></Form.Check>
+                              ) : (
+                                <Form.Check
+                                  disabled
+                                  className="p-0"
+                                  style={{ textAlign: "left" }}
+                                  type="checkbox"
+                                  defaultChecked={obj.validada}
+                                  onChange={(e) =>
+                                    handleValidadaStatus(e, obj._id)
+                                  }
+                                ></Form.Check>
+                              )}
+                            </Row>
                           </Col>
                         </Row>
                       </ListGroup.Item>
@@ -343,4 +364,4 @@ function Tarefas() {
   );
 }
 
-export default Tarefas;
+export default TarefasGestor;

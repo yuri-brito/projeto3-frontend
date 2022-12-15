@@ -161,7 +161,7 @@ const TarefaCreate = ({ reload, setReload }) => {
                         placeholder="Selecione uma atividade"
                         name="atividade"
                         className="mb-3"
-                        options={atividade}
+                        options={atividade.filter((ele) => ele.ativa)}
                         getOptionLabel={(option) => `${option.titulo}`}
                         styles={colourStyles}
                         isSearchable={true}
@@ -173,7 +173,7 @@ const TarefaCreate = ({ reload, setReload }) => {
                         placeholder="Selecione uma Dedução"
                         name="deducao"
                         className="mb-3"
-                        options={deducao}
+                        options={deducao.filter((ele) => ele.ativa)}
                         getOptionLabel={(option) => `${option.titulo}`}
                         styles={colourStyles}
                         isSearchable={true}

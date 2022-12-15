@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Modal,
@@ -13,52 +13,57 @@ import { toast } from "react-hot-toast";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
-const UsuarioEdit = ({ usuarioData, reload, setReload }) => {
+const UsuarioEdit = ({ usuarioData, reload, setReload, setoresData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [setoresData, setSetoresData] = useState({});
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     name: "",
     email: "",
     role: "",
+    setor: "",
   });
-  const roles = ["usuario", "gestor", "admin"];
-
-  async function fetchingSetores() {
-    try {
-      const response = await api.get(`/setor/registroPage`);
-      const tempo = (ms) => {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      };
-      await tempo(2000);
-      setSetoresData(response.data);
-      setIsLoading(false);
-      console.log(setoresData);
-    } catch (error) {
-      toast.error("Algo deu errado. Tente novamente!");
-    }
-  }
-  useEffect(() => {
-    fetchingSetores();
-  }, []);
+  const roles = [
+    { value: "usuario", label: "usuario" },
+    { value: "gestor", label: "gestor" },
+    { value: "admin", label: "admin" },
+  ];
 
   const handleShow = () => {
-    setForm({
-      name: usuarioData.name,
-      email: usuarioData.email,
-      role: usuarioData.role,
-    });
+    if (!usuarioData.setor) {
+      setForm({
+        name: usuarioData.name,
+        email: usuarioData.email,
+        role: usuarioData.role,
+        setor: "blank",
+      });
+    } else {
+      setForm({
+        name: usuarioData.name,
+        email: usuarioData.email,
+        role: usuarioData.role,
+        setor: usuarioData.setor._id,
+      });
+    }
     setShow(true);
   };
   const handleClose = () => {
     setShow(false);
-    setForm({});
+    setForm({
+      name: "",
+      email: "",
+      role: "",
+      setor: "",
+    });
   };
 
-  const handleChange = (e) => {
-    if (e.target === undefined) {
-      setForm({ ...form, role: e });
-      console.log(e);
+  const handleChange = (e, selector) => {
+    if (selector) {
+      if (selector.name === "setor") {
+        setForm({ ...form, setor: e._id });
+      }
+      if (selector.name === "role") {
+        setForm({ ...form, role: e.value });
+      }
     } else {
       setForm({ ...form, [e.target.name]: e.target.value });
     }
@@ -66,9 +71,15 @@ const UsuarioEdit = ({ usuarioData, reload, setReload }) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const userUpdate = {
+      name: form.name,
+      email: form.email,
+      role: form.role,
+    };
     try {
       setIsLoading(true);
-      await api.put(`/user/edit/${usuarioData._id}}`, form);
+      await api.put(`/user/edit/${usuarioData._id}`, userUpdate);
+      await api.put(`/setor/insertUser/${usuarioData._id}/${form.setor}`);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
@@ -81,44 +92,8 @@ const UsuarioEdit = ({ usuarioData, reload, setReload }) => {
       handleClose();
       setReload(!reload);
     } catch (error) {
-      toast.error(error.response.data.msg);
+      toast.error(error.response.data);
       setIsLoading(false);
-    }
-  }
-
-  async function handleUsuarioStatus(e) {
-    const newStatus = e.target.checked;
-
-    try {
-      await api.put(`/user/edit/${usuarioData._id}`, { active: newStatus });
-      if (newStatus) {
-        toast.success(
-          <span>
-            Status do usuário alterado para: <b>ativo</b>
-          </span>
-        );
-      } else {
-        toast.success(
-          <span>
-            Status do usuário alterado para: <b>inativo</b>
-          </span>
-        );
-      }
-    } catch (error) {
-      toast.error("Algo deu errado. Tente novamente!");
-    }
-  }
-
-  async function handleUsuarioSetor(e) {
-    const newSetor = e;
-
-    try {
-      await api.put(`/insertUser/${usuarioData._id}/${e._id}`);
-      toast.success(`Dados de "${usuarioData.name}" alterados com sucesso.`, {
-        duration: 7000,
-      });
-    } catch (error) {
-      toast.error("Algo deu errado. Tente novamente!");
     }
   }
 
@@ -171,7 +146,7 @@ const UsuarioEdit = ({ usuarioData, reload, setReload }) => {
                     <Form.Group className="ms-3 mb-3 w-100">
                       <FloatingLabel label="Nome completo" className="mb-3">
                         <Form.Control
-                          width
+                          // width
                           type="string"
                           name="name"
                           value={form.name}
@@ -180,15 +155,28 @@ const UsuarioEdit = ({ usuarioData, reload, setReload }) => {
                       </FloatingLabel>
                       <FloatingLabel label="e-mail" className="mb-3">
                         <Form.Control
-                          width
+                          // width
                           type="string"
-                          name="sigla"
+                          name="email"
                           value={form.email}
                           onChange={handleChange}
                         />
                       </FloatingLabel>
+
+                      <Select
+                        placeholder="Selecione um Perfil..."
+                        name="role"
+                        className="mb-3"
+                        options={roles}
+                        defaultValue={usuarioData.role}
+                        styles={colourStyles}
+                        isSearchable={true}
+                        onChange={(e, selector) => handleChange(e, selector)}
+                      />
                       <Select
                         placeholder="Selecione um setor..."
+                        name="setor"
+                        className="mb-3"
                         options={setoresData}
                         getOptionLabel={(option) =>
                           `${option.sigla} - ${option.nome}`
@@ -196,17 +184,7 @@ const UsuarioEdit = ({ usuarioData, reload, setReload }) => {
                         defaultValue={usuarioData.setor}
                         styles={colourStyles}
                         isSearchable={true}
-                        onChange={(e) => handleChange(e)}
-                      />
-
-                      <Select
-                        placeholder="Selecione um(a) chefe"
-                        name="chefe"
-                        className="mb-3"
-                        options={roles}
-                        selectedoption
-                        styles={colourStyles}
-                        onChange={(e) => handleChange(e)}
+                        onChange={(e, selector) => handleChange(e, selector)}
                       />
                     </Form.Group>
                   </Col>

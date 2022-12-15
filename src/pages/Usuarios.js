@@ -1,8 +1,7 @@
 import api from "../api/api.js";
 import toast from "react-hot-toast";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import {
-  Button,
   Card,
   Col,
   Container,
@@ -14,39 +13,42 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import SpinnerImage from "../components/SpinnerImage.js";
-import { Link, useParams } from "react-router-dom";
-import { AuthContext } from "../contexts/authContext.js";
 import UsuarioEdit from "../components/UsuarioEdit.js";
 import UsuarioDelete from "../components/UsuarioDelete.js";
 
 const Usuarios = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [usuarios, setUsuarios] = useState({});
+  const [usuariosData, setUsuariosData] = useState({});
   const [search, setSearch] = useState("");
   const [reload, setReload] = useState(true);
-  const { loggedUser } = useContext(AuthContext);
+  const [setoresData, setSetoresData] = useState({});
 
-  //api dos dados dos usuários
-  async function fetchingUsuarios() {
+  //api dos dados dos usuários e dos setores
+  async function fetchingData() {
     try {
       const response = await api.get(`/user/all-users`);
+      const req = await api.get(`/setor/registroPage`);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
-      await tempo(2000);
-      setUsuarios(response.data);
+      //await tempo(2000);
+      setUsuariosData(response.data);
+      setSetoresData(req.data);
       setIsLoading(false);
     } catch (error) {
       toast.error("Algo deu errado. Tente novamente!");
     }
   }
+
   useEffect(() => {
-    fetchingUsuarios();
+    fetchingData();
   }, [reload]);
 
-  async function handleUsuarioStatus(e, usuarioId) {
-    const newStatus = e.target.checked;
+  console.log(usuariosData);
+  console.log(setoresData);
 
+  const handleUsuarioStatus = async (e, usuarioId) => {
+    const newStatus = e.target.checked;
     try {
       await api.put(`/user/edit/${usuarioId}`, { active: newStatus });
       if (newStatus) {
@@ -62,10 +64,11 @@ const Usuarios = () => {
           </span>
         );
       }
+      setReload(!reload);
     } catch (error) {
       toast.error("Algo deu errado. Tente novamente!");
     }
-  }
+  };
   function handleSearch(e) {
     setSearch(e.target.value);
   }
@@ -116,7 +119,7 @@ const Usuarios = () => {
                     </Col>
                   </Row>
                 </ListGroup.Item>
-                {usuarios
+                {usuariosData
                   .filter((usuario) => {
                     return (
                       usuario.name
@@ -130,13 +133,27 @@ const Usuarios = () => {
                       usuario.role
                         .toString()
                         .toLowerCase()
-                        .includes(search.toLowerCase()) ||
-                      usuario.setor.toLowerCase().includes(search.toLowerCase())
+                        .includes(search.toLowerCase())
                     );
                   })
                   .reverse()
                   .map((obj, index) => {
-                    if (!obj.setor) obj.setor = "não atribuído";
+                    let setor = "blank";
+                    if (!obj.setor) {
+                      setor = "sem setor";
+                    } else {
+                      setor = `${obj.setor.sigla} – ${obj.setor.nome}`;
+                    }
+                    if (obj.role === "usuario") {
+                      obj.role = "Usuário";
+                    }
+                    if (obj.role === "gestor") {
+                      obj.role = "Gestor";
+                    }
+                    if (obj.role === "admin") {
+                      obj.role = "Admin";
+                    }
+
                     return (
                       <ListGroup.Item
                         as={"div"}
@@ -238,35 +255,29 @@ const Usuarios = () => {
                             >
                               Setor
                             </Row>
-                            {obj.setor && (
-                              <div>
-                                {obj.setor.length < 15 ? (
-                                  <Row style={{ textAlign: "left" }}>
-                                    {obj.setor}
-                                  </Row>
-                                ) : (
-                                  <Row style={{ textAlign: "left" }}>
-                                    <OverlayTrigger
-                                      placement="top"
-                                      overlay={
-                                        <Tooltip id={`tooltip-top`}>
-                                          {obj.setor}
-                                        </Tooltip>
-                                      }
-                                    >
-                                      <Card.Text
-                                        style={{
-                                          margin: 0,
-                                          padding: 0,
-                                          textAlign: "left",
-                                        }}
-                                      >
-                                        {obj.setor.slice(0, 15)}...
-                                      </Card.Text>
-                                    </OverlayTrigger>
-                                  </Row>
-                                )}
-                              </div>
+                            {setor.length < 15 ? (
+                              <Row style={{ textAlign: "left" }}>{setor}</Row>
+                            ) : (
+                              <Row style={{ textAlign: "left" }}>
+                                <OverlayTrigger
+                                  placement="top"
+                                  overlay={
+                                    <Tooltip id={`tooltip-top`}>
+                                      {setor}
+                                    </Tooltip>
+                                  }
+                                >
+                                  <Card.Text
+                                    style={{
+                                      margin: 0,
+                                      padding: 0,
+                                      textAlign: "left",
+                                    }}
+                                  >
+                                    {setor.slice(0, 15)}...
+                                  </Card.Text>
+                                </OverlayTrigger>
+                              </Row>
                             )}
                           </Col>
                           <Col className="col-1 ms-3">
@@ -296,7 +307,7 @@ const Usuarios = () => {
                                 className="p-0"
                                 style={{ textAlign: "left" }}
                                 type="checkbox"
-                                defaultChecked={obj.active}
+                                checked={obj.active}
                                 onChange={(e) =>
                                   handleUsuarioStatus(e, obj._id)
                                 }
@@ -310,6 +321,7 @@ const Usuarios = () => {
                               usuarioData={obj}
                               reload={reload}
                               setReload={setReload}
+                              setoresData={setoresData}
                             />
                           </Col>
                           <Col className="col-1 d-flex justify-content-center align-items-end">

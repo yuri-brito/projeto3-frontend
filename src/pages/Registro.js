@@ -62,7 +62,9 @@ const Registro = (props) => {
       }
       setIsLoading(true);
       const response = await api.post("/user/register", form);
-      await api.put(`/setor/registerUser/${response.data._id}/${form.setor}`);
+      if (form.setor) {
+        await api.put(`/setor/registerUser/${response.data._id}/${form.setor}`);
+      }
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };

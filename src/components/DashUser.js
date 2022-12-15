@@ -17,7 +17,7 @@ const DashUser = ({
     });
   }
   async function calculaMeta() {
-    const somaCon = await userData.tarefas
+    const somaCon = await userData
       .filter(
         (tarefa) =>
           tarefa.concluida &&
@@ -27,7 +27,7 @@ const DashUser = ({
       .reduce((acc, cur) => {
         return (acc += cur.horas);
       }, 0);
-    const somaVal = await userData.tarefas
+    const somaVal = await userData
       .filter(
         (tarefa) =>
           tarefa.validada &&

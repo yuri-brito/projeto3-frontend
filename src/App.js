@@ -15,6 +15,7 @@ import Profile from "./pages/Profile";
 import Atividades from "./pages/Atividades";
 import Deducoes from "./pages/Deducoes";
 import Usuarios from "./pages/Usuarios";
+import TarefasGestor from "./pages/TarefasGestor";
 function App() {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,6 +50,10 @@ function App() {
           <Route
             path="/setor/:setorId"
             element={<ProtectedRoute Component={SetorGestor} />}
+          />
+          <Route
+            path="/tarefas/:userId"
+            element={<ProtectedRoute Component={TarefasGestor} />}
           />
           <Route
             path="/adminsetor"

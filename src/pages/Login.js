@@ -2,17 +2,24 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import { Card, FloatingLabel } from "react-bootstrap";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import api from "../api/api.js";
 import { AuthContext } from "../contexts/authContext";
-import Footer from "../components/Footer.js";
+
 function Login(props) {
   const navigate = useNavigate();
   const { loggedUser, setLoggedUser } = useContext(AuthContext);
-
+  function testLogged() {
+    if (loggedUser) {
+      navigate("/profile");
+    }
+  }
+  useEffect(() => {
+    testLogged();
+  });
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   function handleChange(e) {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value });

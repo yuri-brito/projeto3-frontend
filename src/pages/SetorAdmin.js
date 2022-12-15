@@ -24,21 +24,25 @@ function SetorAdmin() {
   const [setorData, setSetorData] = useState({});
   const [search, setSearch] = useState("");
   const [reload, setReload] = useState(true);
+  const [usuariosData, setUsuariosData] = useState({});
 
-  //api dos dados do setor
+  //api dos dados do setor e dos usuários
   async function fetchingDadosSetor() {
     try {
       const response = await api.get(`/setor/`);
+      const res = await api.get(`/user/all-users`);
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
       await tempo(2000);
       setSetorData(response.data);
+      setUsuariosData(res.data);
       setIsLoading(false);
     } catch (error) {
       toast.error("Algo deu errado. Tente novamente!");
     }
   }
+
   useEffect(() => {
     fetchingDadosSetor();
   }, [reload]);
@@ -91,7 +95,11 @@ function SetorAdmin() {
                       </FloatingLabel>
                     </Col>
                     <Col className="col-6">
-                      <SetorCreate reload={reload} setReload={setReload} />
+                      <SetorCreate
+                        reload={reload}
+                        setReload={setReload}
+                        usuarios={usuariosData}
+                      />
                     </Col>
                   </Row>
                 </ListGroup.Item>
@@ -171,7 +179,7 @@ function SetorAdmin() {
                             >
                               Chefe
                             </Row>
-                            {obj.chefe.name && (
+                            {obj.chefe && (
                               <div>
                                 {obj.chefe.name.length < 15 ? (
                                   <Row style={{ textAlign: "left" }}>
@@ -213,7 +221,7 @@ function SetorAdmin() {
                             >
                               Substituto(a)
                             </Row>
-                            {obj.substituto.name && (
+                            {obj.substituto && (
                               <div>
                                 {obj.substituto.name.length < 15 ? (
                                   <Row style={{ textAlign: "left" }}>
@@ -277,6 +285,7 @@ function SetorAdmin() {
                               setorData={obj}
                               reload={reload}
                               setReload={setReload}
+                              usuarios={usuariosData}
                             />
                           </Col>
                           <Col className="p-0 d-flex justify-content-center align-items-end">

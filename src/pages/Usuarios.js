@@ -44,9 +44,6 @@ const Usuarios = () => {
     fetchingData();
   }, [reload]);
 
-  console.log(usuariosData);
-  console.log(setoresData);
-
   const handleUsuarioStatus = async (e, usuarioId) => {
     const newStatus = e.target.checked;
     try {

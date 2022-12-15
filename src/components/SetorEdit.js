@@ -13,27 +13,8 @@ import { toast } from "react-hot-toast";
 import api from "../api/api";
 import SpinnerImage from "./SpinnerImage";
 
-const SetorEdit = ({ setorData, reload, setReload }) => {
+const SetorEdit = ({ setorData, reload, setReload, usuarios }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [usuarios, setUsuarios] = useState({});
-
-  async function fetchingUsuarios() {
-    try {
-      const response = await api.get(`/user/all-users`);
-      const tempo = (ms) => {
-        return new Promise((resolve) => setTimeout(resolve, ms));
-      };
-      await tempo(2000);
-      setUsuarios(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      toast.error("Algo deu errado. Tente novamente!");
-    }
-  }
-  useEffect(() => {
-    fetchingUsuarios();
-  }, []);
-
   const [show, setShow] = useState(false);
   const [form, setForm] = useState({
     nome: "",
@@ -151,7 +132,6 @@ const SetorEdit = ({ setorData, reload, setReload }) => {
                     <Form.Group className="ms-3 mb-3 w-100">
                       <FloatingLabel label="Nome do setor" className="mb-3">
                         <Form.Control
-                          width
                           type="string"
                           name="nome"
                           value={form.nome}
@@ -160,7 +140,6 @@ const SetorEdit = ({ setorData, reload, setReload }) => {
                       </FloatingLabel>
                       <FloatingLabel label="Sigla do setor" className="mb-3">
                         <Form.Control
-                          width
                           type="string"
                           name="sigla"
                           value={form.sigla}
@@ -173,7 +152,9 @@ const SetorEdit = ({ setorData, reload, setReload }) => {
                           placeholder="Selecione um(a) chefe"
                           name="chefe"
                           className="mb-3"
-                          options={usuarios}
+                          options={usuarios.filter(
+                            (usuario) => usuario.role === "gestor"
+                          )}
                           selectedoption
                           getOptionLabel={(option) => `${option.name}`}
                           styles={colourStyles}
@@ -184,7 +165,9 @@ const SetorEdit = ({ setorData, reload, setReload }) => {
                         <Select
                           name="chefe"
                           className="mb-3"
-                          options={usuarios}
+                          options={usuarios.filter(
+                            (usuario) => usuario.role === "gestor"
+                          )}
                           defaultValue={form.chefe}
                           getOptionLabel={(option) => `${option.name}`}
                           styles={colourStyles}
@@ -198,7 +181,9 @@ const SetorEdit = ({ setorData, reload, setReload }) => {
                           placeholder="Selecione um(a) substituto(a)"
                           name="substituto"
                           className="mb-3"
-                          options={usuarios}
+                          options={usuarios.filter(
+                            (usuario) => usuario.role === "gestor"
+                          )}
                           getOptionLabel={(option) => `${option.name}`}
                           styles={colourStyles}
                           isSearchable={true}
@@ -208,7 +193,9 @@ const SetorEdit = ({ setorData, reload, setReload }) => {
                         <Select
                           name="substituto"
                           className="mb-3"
-                          options={usuarios}
+                          options={usuarios.filter(
+                            (usuario) => usuario.role === "gestor"
+                          )}
                           defaultValue={form.substituto}
                           getOptionLabel={(option) => `${option.name}`}
                           styles={colourStyles}

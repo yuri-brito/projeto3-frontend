@@ -175,7 +175,7 @@ const TarefaEdit = ({ tarefaData, reload, setReload }) => {
                     <Form.Group className="ms-3 mb-3 w-100">
                       {tarefaData.atividade === null ? (
                         <Select
-                          placeholder="Selecione uma atividade"
+                          placeholder="Selecione uma Atividade"
                           name="atividade"
                           className="mb-3"
                           options={atividade}
@@ -188,6 +188,7 @@ const TarefaEdit = ({ tarefaData, reload, setReload }) => {
                       ) : (
                         <Select
                           name="atividade"
+                          placeholder="Selecione uma Atividade"
                           className="mb-3"
                           options={atividade}
                           defaultValue={form.atividade}
@@ -212,6 +213,7 @@ const TarefaEdit = ({ tarefaData, reload, setReload }) => {
                         />
                       ) : (
                         <Select
+                          placeholder="Selecione uma Dedução"
                           name="deducao"
                           className="mb-3"
                           options={deducao}

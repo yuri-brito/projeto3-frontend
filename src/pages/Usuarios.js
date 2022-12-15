@@ -144,16 +144,6 @@ const Usuarios = () => {
                     } else {
                       setor = `${obj.setor.sigla} – ${obj.setor.nome}`;
                     }
-                    if (obj.role === "usuario") {
-                      obj.role = "Usuário";
-                    }
-                    if (obj.role === "gestor") {
-                      obj.role = "Gestor";
-                    }
-                    if (obj.role === "admin") {
-                      obj.role = "Admin";
-                    }
-
                     return (
                       <ListGroup.Item
                         as={"div"}

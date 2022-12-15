@@ -34,7 +34,6 @@ const UsuarioEdit = ({ usuarioData, reload, setReload, setoresData }) => {
         name: usuarioData.name,
         email: usuarioData.email,
         role: usuarioData.role,
-        setor: "blank",
       });
     } else {
       setForm({
@@ -71,6 +70,14 @@ const UsuarioEdit = ({ usuarioData, reload, setReload, setoresData }) => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!form.setor && form.role === "gestor") {
+      return (
+        toast.error(`perfil "gestor" precisa de um setor definido.`),
+        {
+          duration: 7000,
+        }
+      );
+    }
     const userUpdate = {
       name: form.name,
       email: form.email,
@@ -79,7 +86,9 @@ const UsuarioEdit = ({ usuarioData, reload, setReload, setoresData }) => {
     try {
       setIsLoading(true);
       await api.put(`/user/edit/${usuarioData._id}`, userUpdate);
-      await api.put(`/setor/insertUser/${usuarioData._id}/${form.setor}`);
+      if (form.setor) {
+        await api.put(`/setor/insertUser/${usuarioData._id}/${form.setor}`);
+      }
       const tempo = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
@@ -92,7 +101,8 @@ const UsuarioEdit = ({ usuarioData, reload, setReload, setoresData }) => {
       handleClose();
       setReload(!reload);
     } catch (error) {
-      toast.error(error.response.data);
+      toast.error(error.response.data.msg);
+      console.log(error);
       setIsLoading(false);
     }
   }
@@ -168,7 +178,10 @@ const UsuarioEdit = ({ usuarioData, reload, setReload, setoresData }) => {
                         name="role"
                         className="mb-3"
                         options={roles}
-                        defaultValue={usuarioData.role}
+                        defaultValue={{
+                          value: usuarioData.role,
+                          label: usuarioData.role,
+                        }}
                         styles={colourStyles}
                         isSearchable={true}
                         onChange={(e, selector) => handleChange(e, selector)}
